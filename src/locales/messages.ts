@@ -5,7 +5,15 @@ export const messages = {
       },
       accounts: {
          createProfile: 'Stwórz konto',
-         chooseProfile: 'Wybierz profil'
+         chooseProfile: 'Wybierz profil',
+         newProfile: {
+            t: 'Dodaj profil',
+            subtitle: 'Dodaj kolejny profil osoby korzystjącej z serwisu Vtime',
+            username: 'Wpisz imię',
+            deleteAvatar: 'Usuń zdjęcie',
+            next: 'Dalej',
+            cancel: 'Anuluj'
+         } 
       }
    }
 }
