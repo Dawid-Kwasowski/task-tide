@@ -19,7 +19,7 @@ const customLightTheme: ThemeDefinition = {
     colors: {
       background: '#D1DEDE',
       surface: '#D1DEDE',
-      primary: '#6200EE',
+      primary: '#1d201fff',
       'primary-darken-1': '#3700B3',
       secondary: '#D1DEDE',
       'secondary-darken-1': '#D1DEDE',

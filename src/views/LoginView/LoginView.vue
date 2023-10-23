@@ -15,6 +15,7 @@
 </template>
 
 <script lang="ts" setup>
+   
    import { ref } from "vue"
    import ProfilesComponent from "@/views/LoginView/components/ProfilesComponent/ProfilesComponent.vue"
    import NewProfileComponent from "@/views/LoginView/components/NewProfileComponent/NewProfileComponent.vue";
