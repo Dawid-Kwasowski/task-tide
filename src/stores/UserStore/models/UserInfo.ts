@@ -7,3 +7,8 @@ export interface IUserInfo {
   user: IUserInfo | null
   userList: IUserInfo[]
  }
+
+ export interface IOwnerInfo {
+  email: string
+  password: string
+ }
