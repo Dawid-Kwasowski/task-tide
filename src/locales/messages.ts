@@ -1,6 +1,7 @@
 const validationMessages = {
    required: 'Pole jest wymagane!',
-   maxLength: 'Maksymalna liczba znaków: {count}'
+   maxLength: 'Maksymalna liczba znaków: {count}',
+   invalidEmail: 'Nieprawidłowy email'
 }
 
 const errors = {
@@ -10,9 +11,22 @@ const errors = {
 export const messages = {
    pl: {
       app: {
-         t: 'VTime',
+         t: 'TaskTide',
          validationMessages,
          errors,
+      },
+      auth: {
+         signInTab: 'Zaloguj się',
+         signUpTab: 'Stwórz konto',
+         signIn: {
+            t: 'Witamy ponownie',
+         },
+         signUp: {
+            t: 'Dołącz do nas'
+         },
+         email: 'Wpisz email',
+         password: 'Wpisz hasło',
+         
       },
       accounts: {
          createProfile: 'Stwórz konto',
