@@ -5,7 +5,9 @@ import { supabase } from '@/plugins/supabase'
 export const useUserStore = defineStore('UserStore', {
    state: (): IUserState => ({
       userList: [],
-      user: null,
+      user: {
+         name: 'Dawid'
+      },
    }),
    actions: {
       async addNewUser(user: IUserInfo): Promise<any> {
