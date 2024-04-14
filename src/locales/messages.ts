@@ -1,3 +1,4 @@
+
 const validationMessages = {
    required: 'Pole jest wymagane!',
    maxLength: 'Maksymalna liczba znaków: {count}',
@@ -40,6 +41,13 @@ export const messages = {
             next: 'Dalej',
             cancel: 'Anuluj'
          } 
+      },
+      home: {
+         task: {  
+            placeholder: 'Nowe zadanie',
+            todayList: 'Lista zadań na dziś',
+            emptyList: 'Brak zadań'
+         },
       }
    }
 }
