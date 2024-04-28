@@ -1,5 +1,5 @@
 export interface ITodo {
-   date: Date | string | Date[] | string[]
+   date: Date | string
    title?: string
    description?: string
    status: TStatus

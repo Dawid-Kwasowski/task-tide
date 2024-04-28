@@ -2,6 +2,10 @@ import { defineStore } from 'pinia'
 import IUserState, { IUserInfo, IOwnerInfo } from './models/UserInfo'
 import { supabase } from '@/plugins/supabase'
 
+import { useStorage } from '@vueuse/core'
+
+
+
 export const useUserStore = defineStore('UserStore', {
    state: (): IUserState => ({
       userList: [],
@@ -46,6 +50,8 @@ export const useUserStore = defineStore('UserStore', {
          try {
             const { data, error } = await supabase.auth.signInWithPassword(owner)
             console.log("data", data)
+            const token = useStorage('access_token',data.session?.access_token)
+            console.log("token", token)
             if(error) {
                console.log("error", error)
             }

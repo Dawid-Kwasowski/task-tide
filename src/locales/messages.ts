@@ -43,10 +43,18 @@ export const messages = {
          } 
       },
       home: {
+         fab: {
+           t: 'Dodaj zadanie' 
+         },
          task: {  
             placeholder: 'Nowe zadanie',
             todayList: 'Lista zadań na dziś',
-            emptyList: 'Brak zadań'
+            closestTask: 'Najblisze zadania',
+            emptyList: 'Brak zadań',
+            addTask: 'Dodaj zadanie',
+            editMode: 'Edytuj Zadania',
+            description: 'Opis zadania (opcjonalne)',
+            noDescription: 'Brak opisu'
          },
       }
    }

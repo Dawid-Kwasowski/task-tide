@@ -13,11 +13,13 @@
             </v-col>
             <v-col cols="12" sm="8">
                <v-text-field
+                  @click:append-inner="toggleIcons = !toggleIcons"
+                  :append-inner-icon="toggleEyes"
                   v-model="password.value.value"
                   :error-messages="password.errorMessage.value"
                   :label="$t('auth.password')"
                   variant="underlined"
-                  type="password"
+                  :type="togglePassword"
                ></v-text-field>
             </v-col>
             <v-col cols="12" sm="8">
@@ -29,7 +31,7 @@
 </template>
 <script setup lang="ts">
 
-import { defineEmits, computed } from "vue"
+import { defineEmits, computed, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useForm, useField, useIsFieldDirty, useIsFieldValid } from "vee-validate"
 import { emailExpression } from "@/validators/email"
@@ -65,8 +67,21 @@ const isPasswordValid = useIsFieldValid("password")
 const buttonCondition = computed((): boolean => (!isEmailDirty.value || !isEmailValid.value) || (!isPasswordDirty.value || !isPasswordValid.value))
 
 const submit = handleSubmit((values: any) => {
-   console.log('submit', values)
    emit('submit', values)
+})
+
+const toggleIcons = ref(false)
+
+const toggleEyes = computed(() => {
+   return toggleIcons.value 
+   ? 'mdi-eye'
+   : 'mdi-eye-off'
+})
+
+const togglePassword = computed(() => {
+   return toggleIcons.value
+   ? 'text'
+   : 'password'
 })
 
 </script>
