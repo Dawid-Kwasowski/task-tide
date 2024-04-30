@@ -16,16 +16,16 @@ export const useUserStore = defineStore('UserStore', {
    actions: {
       async addNewUser(user: IUserInfo): Promise<any> {
          try {
-            if(this.userList
+            if (this.userList
                .some((userInList: IUserInfo): boolean => user.name === userInList.name)) {
-                  throw new Error('Error: 409')
-               }
+               throw new Error('Error: 409')
+            }
             this.userList.push({
                name: user.name,
                avatar: user.avatar ?? undefined
             })
             return user
-         } catch (e: any) { Promise.reject(e.message)  }
+         } catch (e: any) { Promise.reject(e.message) }
       },
 
       async saveUserInfo(user: IUserInfo): Promise<any> {
@@ -37,7 +37,7 @@ export const useUserStore = defineStore('UserStore', {
          try {
             const { data, error } = await supabase.auth.signUp(owner)
             console.log("data", data)
-            if(error) {
+            if (error) {
                console.log("error", error)
             }
 
@@ -48,13 +48,15 @@ export const useUserStore = defineStore('UserStore', {
 
       async signInOwner(owner: IOwnerInfo): Promise<any> {
          try {
-            const { data, error } = await supabase.auth.signInWithPassword(owner)
-            console.log("data", data)
-            const token = useStorage('access_token',data.session?.access_token)
-            console.log("token", token)
-            if(error) {
-               console.log("error", error)
+            const { error } = await supabase.auth.signInWithPassword(owner)
+            
+            if (error) {
+               throw error
             }
+            
+            const { data: { user } } = await supabase.auth.getUser()
+            
+            return user?.aud
          } catch (e) {
             console.log(e)
          }

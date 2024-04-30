@@ -23,7 +23,7 @@
                ></v-text-field>
             </v-col>
             <v-col cols="12" sm="8">
-               <v-btn :disabled="buttonCondition" block @click="submit">Dalej</v-btn>
+               <v-btn :disabled="buttonCondition" block type="submit">Dalej</v-btn>
             </v-col>
          </v-row>
       </v-container>
