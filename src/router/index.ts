@@ -1,5 +1,4 @@
 // Composables
-import { useStorage } from '@vueuse/core'
 import { supabase } from '@/plugins/supabase'
 import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
@@ -43,9 +42,6 @@ router.beforeEach(async (to, from): Promise<{name: string} | undefined> => {
       return { name: 'Auth' }
     }
   }
-
-
-  // return false
 })
 
 export default router

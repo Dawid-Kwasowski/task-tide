@@ -35,8 +35,9 @@
                         :key="index"
                         class="d-flex justify-between"
                         @click="item.action"
+                        :title="item.text"
                       >
-                        <template #append>
+                        <template #prepend>
                           <v-btn
                             class="ma-0"
                             density="comfortable"
@@ -45,7 +46,6 @@
                             :icon="item.icon"
                           ></v-btn>
                         </template>
-                        <v-list-item-title v-text="item.text"></v-list-item-title>
                       </v-list-item>
                     </v-list>
                   </v-menu>
@@ -91,109 +91,103 @@
     </v-card>
   </v-row>
 
-  <template v-show="false">
-    <input type="file" @change="selectFile" accept="image/*" ref="uploader"
-  /></template>
+  <div v-show="false">
+    <input type="file" @change="selectFile" accept="image/*" ref="uploader" />
+  </div>
 </template>
 <script lang="ts" setup>
-// imports
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
+import IMenuItem from "./models/IMenuItem";
+import { useField, useForm, useIsFieldDirty, useIsFieldValid } from "vee-validate";
+import { useUserStore } from "@/stores/UserStore/UserStore";
+import { useRouter } from "vue-router";
+import { useToastStore } from "@/stores/components/ToastStore/ToastStore";
 
-import { ref } from "vue"
-import { useI18n } from "vue-i18n"
-import IMenuItem from "./models/IMenuItem"
-import { useField, useForm, useIsFieldDirty, useIsFieldValid } from "vee-validate"
-import { useUserStore } from "@/stores/UserStore/UserStore"
-import { useRouter } from "vue-router"
-import { useToastStore } from "@/stores/components/ToastStore/ToastStore"
-// imports end
-
-// composables
-
-const { t } = useI18n()
-const { addNewUser, saveUserInfo } = useUserStore()
-const { show } = useToastStore()
-const router = useRouter()
+const { t } = useI18n();
+const { addNewUser, saveUserInfo } = useUserStore();
+const { show } = useToastStore();
+const router = useRouter();
 
 const { handleSubmit, handleReset } = useForm({
   validationSchema: {
     name(value: string): string | true {
-      if (!value) return t("app.validationMessages.required")
-      if (value?.length > 20) return t("app.validationMessages.maxLength", { count: 20 })
-      return true
+      if (!value) return t("app.validationMessages.required");
+      if (value?.length > 20) return t("app.validationMessages.maxLength", { count: 20 });
+      return true;
     },
   },
-})
+});
 
-// composables end
+const emit = defineEmits(["cancel"]);
 
-const emit = defineEmits(["cancel"])
+const name: any = useField("name");
 
-const name: any = useField("name")
+const isNameDirty = useIsFieldDirty("name");
+const isNameValid = useIsFieldValid("name");
 
-const isNameDirty = useIsFieldDirty("name")
-const isNameValid = useIsFieldValid("name")
-
-const menu = ref<boolean>(false)
-const uploader = ref<HTMLInputElement | null>(null)
-const selectedImage = ref<any>(null)
+const menu = ref<boolean>(false);
+const uploader = ref<HTMLInputElement | null>(null);
+const selectedImage = ref<any>(null);
 
 const onTriggerUploader = (): void => {
-  uploader.value?.click()
-}
+  uploader.value?.click();
+};
 
 const selectFile = (input: any): void => {
-  if (!input) return
-  const file = input.target.files[0]
-  const reader = new FileReader()
+  if (!input) return;
+  const file = input.target.files[0];
+  const reader = new FileReader();
 
   reader.onload = (e): void => {
-    if (!e.target?.result) return
-    selectedImage.value = e.target?.result
-    if (menu.value) menu.value = false
-  }
+    if (!e.target?.result) return;
+    selectedImage.value = e.target?.result;
+    console.log(selectedImage.value);
+    if (menu.value) menu.value = false;
+  };
 
   if (file) {
-    reader.readAsDataURL(file)
+    reader.readAsDataURL(file);
   }
-}
+};
 
 const deleteAvatar = (): void => {
-  selectedImage.value = null
-  menu.value = false
-}
+  selectedImage.value = null;
+  menu.value = false;
+};
 
 const submit = handleSubmit((values: any): void => {
-  Object.assign(values, { avatar: selectedImage.value })
-  addNewUser(values)
-})
+  Object.assign(values, { avatar: selectedImage.value });
+  addNewUser(values);
+});
 
 const cancel = (): void => {
-  selectedImage.value = null
-  handleReset()
-  emit("cancel")
-}
+  selectedImage.value = null;
+  handleReset();
+  emit("cancel");
+};
 
 const addNewProfile = async (): Promise<void> => {
   try {
     const result = await addNewUser({
-      avatar: selectedImage.value,
-      name: name.value.value,
-    })
+      avatar_url: selectedImage.value,
+      username: name.value.value,
+    });
 
     if (result) {
-      await saveUserInfo(result)
-      router.push({ path: "/" })
+      await saveUserInfo(result);
+      router.push({ path: "/" });
     }
   } catch (err: any) {
-    console.error(err.message)
+    console.error(err.message);
 
     await show({
       color: "danger",
       message: err.message,
       timeout: 3000,
-    })
+    });
   }
-}
+};
 const menuItems: IMenuItem[] = [
   {
     text: t("accounts.newProfile.editPhoto"),
@@ -207,5 +201,5 @@ const menuItems: IMenuItem[] = [
     color: "error",
     action: deleteAvatar,
   },
-]
+];
 </script>
