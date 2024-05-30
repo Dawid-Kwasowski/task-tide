@@ -1,4 +1,5 @@
 // Composables
+import { supabase } from '@/plugins/supabase'
 import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
@@ -29,6 +30,18 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+})
+
+router.beforeEach(async (to, from): Promise<{name: string} | undefined> => {
+  if (from.name !== 'Auth') {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (
+      to.name !== 'Auth'
+      && user?.aud !== 'authenticated'
+    ) {
+      return { name: 'Auth' }
+    }
+  }
 })
 
 export default router

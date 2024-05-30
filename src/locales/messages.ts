@@ -19,6 +19,12 @@ export const messages = {
       auth: {
          signInTab: 'Zaloguj się',
          signUpTab: 'Stwórz konto',
+         editProfiles: {
+           managamnet: 'Zardządzaj profilami',
+           editName: 'Edytuj imię',
+           deleteProfile: 'Usuń użytkownika',
+           editAvatar: 'Edytuj zdjęcie'
+         },
          signIn: {
             t: 'Witamy ponownie',
          },
@@ -43,10 +49,21 @@ export const messages = {
          } 
       },
       home: {
+         fab: {
+           t: 'Dodaj zadanie' 
+         },
+         bar: {
+            hello: "Witaj!"
+         },
          task: {  
             placeholder: 'Nowe zadanie',
             todayList: 'Lista zadań na dziś',
-            emptyList: 'Brak zadań'
+            closestTask: 'Najblisze zadania',
+            emptyList: 'Brak zadań',
+            addTask: 'Dodaj zadanie',
+            editMode: 'Edytuj Zadania',
+            description: 'Opis zadania (opcjonalne)',
+            noDescription: 'Brak opisu'
          },
       }
    }

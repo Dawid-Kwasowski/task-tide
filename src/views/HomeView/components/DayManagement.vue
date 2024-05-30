@@ -1,69 +1,55 @@
 <script setup lang="ts">
 import type { IDayManagement } from "./models/IDayManagement"
-import { useCalendarStore } from '@/stores/CalendarStore/CalendarStore'
-import { format } from "date-fns";
-import { reactive } from 'vue'
-import { mapStatus } from '@/utils/colorStatus'
+import { useCalendarStore } from "@/stores/CalendarStore/CalendarStore"
+
 const store = useCalendarStore()
 
-
-const props = defineProps<{ data: IDayManagement[] }>()
-
-const newTask: IDayManagement = reactive({
-  creator: 'Dawid',
-  date: format(new Date, 'MM/dd/yyyy'),
-  status: 'todo',
-  description: '',
-  title: ''
-})
-
-const addTask = (): void => {
-
-  const payload = structuredClone(newTask)
- 
-  store.addTask(payload)
-}
+const props = defineProps<{
+  data: IDayManagement[],
+  selectedDate: Date | string | Date[] | string[]
+}>()
 
 </script>
 
 <template>
   <div>
     <v-container>
-      <v-row>
-        <v-col>
-          <v-text-field append-inner-icon="mdi-plus" v-model="newTask.title" 
-          @click:append-inner="addTask" :label="$t('home.task.placeholder')"
-            variant="solo-filled"></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12">
-          <div class="text-subtitle-4 mb-2">{{ $t('home.task.todayList') }}</div>
 
+      <v-divider></v-divider>
+      <v-row class="mt-2">
+        <v-col cols="12">
           <template v-if="props.data.length > 0">
+            <div class="text-subtitle-4 mb-2">{{ $t('home.task.todayList') }}</div>
             <v-expansion-panels>
               <v-expansion-panel v-for="(task, index) in props.data" :key="index">
+
                 <v-expansion-panel-title>
-                <span class="mr-2"> {{ task.title }}</span>
-                <v-chip
-                  rounded
-                  variant="tonal" 
-                  :color="mapStatus(task.status)" 
-                  :text="task.status"></v-chip>
+                  <span class="mr-2"> {{ task.title }}</span>
                 </v-expansion-panel-title>
+
                 <v-expansion-panel-text>
-                  {{ task.description }}
+                  <span class="text-subtitle-2">
+                    {{ task.description || $t('home.task.noDescription') }}
+                  </span>
                 </v-expansion-panel-text>
               </v-expansion-panel>
             </v-expansion-panels>
           </template>
-          <template v-else>
-
+          <template v-else-if="store.upcomingTasks.length > 0">
+            <div class="text-subtitle-4 mb-2">{{ $t('home.task.closestTask') }}</div>
             <v-list density="compact" rounded>
-              <v-list-item>{{ $t('home.task.emptyList') }}</v-list-item>
+              <v-list-item v-for="(task, index) in store.upcomingTasks" :key="index">
+                <v-list-item-subtitle> {{ task.date }} </v-list-item-subtitle>
+                <v-list-item-title> {{ task.title }} </v-list-item-title>
+                <v-divider :thickness="2"></v-divider>
+              </v-list-item>
             </v-list>
           </template>
-
+          <template v-else>
+            <v-list density="compact" rounded>
+              <v-list-item><span class="mr-2"> {{ $t('home.task.emptyList') }}</span></v-list-item>
+            </v-list>
+          </template>
         </v-col>
       </v-row>
     </v-container>

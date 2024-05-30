@@ -1,14 +1,17 @@
 export interface IUserInfo {
-   name: string
-   avatar?: string
- }
+  user_id: string;
+  username: string
+  avatar_url?: string
+}
 
- export default interface IUserState {
-  user: IUserInfo | null
+export type TNewUserInfo = Omit<IUserInfo, "user_id">
+
+export default interface IUserState {
+  user: any
   userList: IUserInfo[]
- }
+}
 
- export interface IOwnerInfo {
+export interface IOwnerInfo {
   email: string
   password: string
- }
+}

@@ -11,16 +11,19 @@
     "@mdi/font": "7.0.96",
     "@popperjs/core": "^2.11.8",
     "@supabase/supabase-js": "^2.38.4",
+    "@types/uuid": "^9.0.8",
     "@vueuse/core": "^10.6.0",
     "date-fns": "^3.6.0",
     "pinia": "^2.1.7",
     "roboto-fontface": "*",
+    "uuid": "^9.0.1",
     "v-calendar": "^3.1.2",
     "vee-validate": "^4.11.8",
     "vue": "^3.2.0",
     "vue-i18n": "9",
     "vue-router": "^4.0.0",
-    "vuetify": "^3.0.0"
+    "vuetify": "^3.0.0",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@babel/types": "^7.21.4",
