@@ -1,5 +1,6 @@
 export default interface ITaskForm {
-   title: string
-   description?: string
-   date: string
+  creator_id: string
+  deadline: string
+  description?: string
+  title: string
 }
