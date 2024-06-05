@@ -1,9 +1,10 @@
 export interface ITodo {
-   date: Date | string
-   title?: string
-   description?: string
-   status: TStatus
-   creator: string
+  created_at: string
+  creator_id: string
+  deadline: Date | string
+  description?: string
+  status: TStatus
+  title?: string
 }
 
 export type TStatus = 'ongoing' | 'done' | 'expired' | 'todo'

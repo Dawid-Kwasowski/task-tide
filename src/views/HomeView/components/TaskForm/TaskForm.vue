@@ -9,8 +9,8 @@
               <v-col>
                 <v-text-field
                   prepend-inner-icon="mdi-calendar-month"
-                  v-model="date.value.value"
-                  :error-messages="date.errorMessage.value"
+                  v-model="reactiveProps.deadline.value"
+                  :error-messages="deadline.errorMessage.value"
                   :readonly="true"
                   variant="solo-filled"
                 ></v-text-field>
@@ -58,28 +58,40 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
+import {defineProps, toRefs, watch} from "vue";
 import type ITaskForm from "./models/ITaskForm";
+import type { ITodo } from "@/models/ITodo"
 import { useForm, useField } from "vee-validate";
 import { string, object } from "yup";
 import { useI18n } from "vue-i18n";
+import {useCalendarStore} from "@/stores/CalendarStore/CalendarStore";
 
 const { t } = useI18n();
 
+const { addTask } = useCalendarStore();
+
 const props = defineProps<ITaskForm>();
+const reactiveProps = toRefs(props)
 
 const max = 120;
 
+watch(reactiveProps['deadline'], (newValue) => {
+  deadline.value.value = newValue
+})
+
 const { handleSubmit } = useForm({
+  initialValues: {
+    deadline: reactiveProps.deadline.value
+  },
   validationSchema: object({
-    date: string()
+    deadline: string()
       .required()
       .test({
         name: "specificDate",
         exclusive: true,
         message: "Changing date is not allowed right now",
         test: (value): boolean =>
-          value == null || /\d{1,2}\/\d{1,2}\/\d{2,4}/.test(value),
+          value == null || /\d{2,4}-\d{1,2}-\d{1,4}/.test(value),
       }),
     title: string().required(),
     description: string()
@@ -92,18 +104,26 @@ const { handleSubmit } = useForm({
         test: (value): boolean => value == null || value.length <= max,
       }),
   }),
-  initialValues: {
-    date: props.date,
-  },
 });
 
-const submit = handleSubmit((values, { resetForm }) => {
-  resetForm();
+const submit = handleSubmit(async (values, { resetForm }) => {
+  try {
+    const payload: ITodo = {
+      ...values,
+      created_at: new Date().toISOString(),
+      creator_id: reactiveProps.creator_id.value,
+      status: 'todo'
+    }
+    await addTask(payload)
+    resetForm();
+  } catch (error) {
+    console.log(error)
+  }
+
+
 });
 
 const title = useField("title");
 const description = useField("description");
-const date = useField("date");
+const deadline = useField("deadline");
 </script>
-
-<style scoped></style>

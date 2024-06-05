@@ -15,6 +15,7 @@
         <div class="d-flex flex-column">
           <div>{{ $t("home.bar.hello") }}</div>
           <div>{{ user.username }}</div>
+
         </div>
       </div>
       <v-btn @click="logoutProfile" class="mx-2" icon>
@@ -25,20 +26,25 @@
 
   <v-container>
     <v-row>
-      <DatePicker
-        class="bg-primary"
-        is-dark="system"
-        v-model="selectedDay"
-        :attributes="attributes"
-        expanded
-      >
-        <template #footer>
-          <day-management
-            :selected-date="formatedDate"
-            :data="selectedDayContent"
-          ></day-management>
-        </template>
-      </DatePicker>
+      <template v-if="skeleton">
+        <v-skeleton-loader width="100%" type="card"></v-skeleton-loader>
+      </template>
+      <template v-else>
+        <DatePicker
+          class="bg-primary"
+          is-dark="system"
+          v-model="selectedDay"
+          :attributes="attributes"
+          expanded
+        >
+          <template #footer>
+            <day-management
+              :selected-date="formatedDate"
+              :data="selectedDayContent"
+            ></day-management>
+          </template>
+        </DatePicker>
+      </template>
     </v-row>
   </v-container>
 
@@ -49,12 +55,13 @@
     </template>
   </action-button>
 
-  <task-form date="22/04/24" activator="#btn" title="Nowe Zadanie"></task-form>
+
+  <task-form :creator_id="user.user_id" :deadline="formatedDate" activator="#btn" title="Nowe Zadanie"></task-form>
 </template>
 
 <script lang="ts" setup>
 import { DatePicker } from "v-calendar";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { format } from "date-fns";
 import DayManagement from "./components/DayManagement.vue";
 import ActionButton from "@/components/ActionButton/ActionButton.vue";
@@ -65,35 +72,40 @@ import { mapStatus } from "@/utils/colorStatus";
 import { useUserStore } from "@/stores/UserStore/UserStore";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
+import {supabase} from "@/plugins/supabase";
 
-const store = useUserStore();
+const userStore = useUserStore();
 
-const { todos } = useCalendarStore();
+const todosStore = useCalendarStore();
 
-const { user } = storeToRefs(store);
+const { todos } = storeToRefs(todosStore);
+const { user } = storeToRefs(userStore);
+
 const route = useRouter();
 
 const selectedDay = ref<Date | number>(new Date());
 
+const skeleton = ref(true);
+
 const formatedDate = computed(() => {
   if (!selectedDay.value) return "";
-  return format(selectedDay.value, "MM/dd/yyyy");
+  return format(selectedDay.value, "yyyy-MM-dd");
 });
 
 const selectedDayContent = computed((): ITodo[] => {
   return selectedDay.value
-    ? todos.filter(({ date }): boolean => date === formatedDate.value)
+    ? todos.value.filter(({ deadline }): boolean => deadline === formatedDate.value)
     : [];
 });
 
 const logoutProfile = async () => {
-  await store.removeUserInfo();
+  await userStore.removeUserInfo();
   route.push({ path: "/browse" });
 };
 
 const attributes = computed(() => [
-  ...todos.map((todo) => ({
-    dates: todo.date,
+  ...todos.value.map((todo) => ({
+    dates: todo.deadline,
     dot: {
       color: mapStatus(todo.status),
     },
@@ -102,10 +114,19 @@ const attributes = computed(() => [
     },
   })),
 ]);
-</script>
 
-<style>
-.position-absolute {
-  position: absolute;
-}
-</style>
+onMounted(async () => {
+  await todosStore.getTask();
+  supabase.channel('tasks-all-channel')
+    .on(
+      "postgres_changes",
+      { event: 'INSERT', schema: 'public', table: 'tasks' },
+      async () => {
+        await todosStore.getTask();
+      }
+    )
+    .subscribe()
+
+  skeleton.value = false;
+});
+</script>
