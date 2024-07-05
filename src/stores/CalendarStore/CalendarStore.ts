@@ -28,11 +28,38 @@ export const useCalendarStore = defineStore('CalendarStore', {
        } catch (error) {
          console.error(error)
        }
-
-
      },
 
-      async getTask() {
+     editTask: async function (task: { id: string, title: string, description: string}) {
+       try {
+
+         const {error} = await supabase
+           .from('tasks')
+           .update({title: task.title, description: task.description})
+           .eq('id',task.id)
+
+          if(error) throw error
+       } catch (err) {
+          console.error(err)
+       }
+     },
+
+     removeTask: async function (id: string): Promise<void> {
+       try {
+         const { error } = await supabase
+           .from('tasks')
+           .delete()
+           .eq('id', id)
+
+         if (error) {
+           throw new Error(`Error removing task: ${error.message}`);
+         }
+
+       } catch (e) {
+         console.error('Error during task removal:', e);
+       }
+     },
+     getTask: async function() {
          try {
             const {data: tasks, error} = await supabase
             .from('tasks')

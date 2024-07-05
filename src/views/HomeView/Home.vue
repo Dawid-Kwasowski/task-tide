@@ -18,7 +18,7 @@
 
         </div>
       </div>
-      <v-btn @click="logoutProfile" class="mx-2" icon>
+      <v-btn @click="logoutProfile" class="mx-2" variant="text" icon>
         <v-icon icon="mdi-logout"></v-icon>
       </v-btn>
     </div>
@@ -48,7 +48,7 @@
     </v-row>
   </v-container>
 
-  <action-button id="btn" color="primary" :disabled="!selectedDay">
+  <action-button @click="taskFormDialog = true"  color="primary" :disabled="!selectedDay">
     <template #body>
       <v-icon class="mr-2" icon="mdi-plus"></v-icon>
       {{ $t("home.fab.t") }}
@@ -56,7 +56,7 @@
   </action-button>
 
 
-  <task-form :creator_id="user.user_id" :deadline="formatedDate" activator="#btn" title="Nowe Zadanie"></task-form>
+  <task-form v-model="taskFormDialog" :creator_id="user.user_id" :deadline="formatedDate" activator="#btn" header="Nowe Zadanie"></task-form>
 </template>
 
 <script lang="ts" setup>
@@ -86,6 +86,8 @@ const route = useRouter();
 const selectedDay = ref<Date | number>(new Date());
 
 const skeleton = ref(true);
+
+const taskFormDialog = ref(false);
 
 const formatedDate = computed(() => {
   if (!selectedDay.value) return "";
@@ -120,7 +122,7 @@ onMounted(async () => {
   supabase.channel('tasks-all-channel')
     .on(
       "postgres_changes",
-      { event: 'INSERT', schema: 'public', table: 'tasks' },
+      { event: '*', schema: 'public', table: 'tasks' },
       async () => {
         await todosStore.getTask();
       }

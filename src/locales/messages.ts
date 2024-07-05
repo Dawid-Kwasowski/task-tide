@@ -33,8 +33,14 @@ export const messages = {
          },
          email: 'Wpisz email',
          password: 'Wpisz hasło',
-         
+
       },
+     components: {
+       confirmDialog: {
+         delete: 'Usuń',
+         cancel: 'Anuluj'
+       }
+     },
       accounts: {
          createProfile: 'Stwórz konto',
          chooseProfile: 'Wybierz profil',
@@ -46,16 +52,16 @@ export const messages = {
             editPhoto: 'Wybierz inne zdjęcie',
             next: 'Dalej',
             cancel: 'Anuluj'
-         } 
+         }
       },
       home: {
          fab: {
-           t: 'Dodaj zadanie' 
+           t: 'Dodaj zadanie'
          },
          bar: {
             hello: "Witaj!"
          },
-         task: {  
+         task: {
             placeholder: 'Nowe zadanie',
             todayList: 'Lista zadań na dziś',
             closestTask: 'Najblisze zadania',
@@ -63,7 +69,9 @@ export const messages = {
             addTask: 'Dodaj zadanie',
             editMode: 'Edytuj Zadania',
             description: 'Opis zadania (opcjonalne)',
-            noDescription: 'Brak opisu'
+            noDescription: 'Brak opisu',
+            confirmDialogTitle: 'Usunąć zaznaczone zadanie?',
+            confirmDialogContent: 'Zadanie zostanie usunięte na stałe, czy chcesz to zrobić?'
          },
       }
    }
