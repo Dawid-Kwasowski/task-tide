@@ -4,7 +4,9 @@
       <v-container>
         <v-row>
           <v-col cols="12">
-            <v-card-title class="text-h3">{{ $t("accounts.newProfile.t") }}</v-card-title>
+            <v-card-title class="text-h3">{{
+              $t("accounts.newProfile.t")
+            }}</v-card-title>
           </v-col>
           <v-col cols="12">
             <v-card-subtitle class="text-wrap">{{
@@ -79,9 +81,11 @@
         </v-row>
         <v-row>
           <v-col class="d-flex" cols="6" md="4">
-            <v-btn @click="addNewProfile" :disabled="!isNameDirty || !isNameValid">{{
-              $t("accounts.newProfile.next")
-            }}</v-btn>
+            <v-btn
+              @click="addNewProfile"
+              :disabled="!isNameDirty || !isNameValid"
+              >{{ $t("accounts.newProfile.next") }}</v-btn
+            >
             <v-btn @click="cancel" variant="text">{{
               $t("accounts.newProfile.cancel")
             }}</v-btn>
@@ -99,7 +103,12 @@
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import IMenuItem from "./models/IMenuItem";
-import { useField, useForm, useIsFieldDirty, useIsFieldValid } from "vee-validate";
+import {
+  useField,
+  useForm,
+  useIsFieldDirty,
+  useIsFieldValid,
+} from "vee-validate";
 import { useUserStore } from "@/stores/UserStore/UserStore";
 import { useRouter } from "vue-router";
 import { useToastStore } from "@/stores/components/ToastStore/ToastStore";
@@ -113,7 +122,8 @@ const { handleSubmit, handleReset } = useForm({
   validationSchema: {
     name(value: string): string | true {
       if (!value) return t("app.validationMessages.required");
-      if (value?.length > 20) return t("app.validationMessages.maxLength", { count: 20 });
+      if (value?.length > 20)
+        return t("app.validationMessages.maxLength", { count: 20 });
       return true;
     },
   },

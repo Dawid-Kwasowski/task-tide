@@ -9,12 +9,12 @@
 </template>
 
 <script setup lang="ts">
-import FormTemplateComponent from "@/views/AuthView/components/FormTemplateComponent/FormTemplateComponent.vue"
-import { useUserStore } from "@/stores/UserStore/UserStore"
+import FormTemplateComponent from "@/views/AuthView/components/FormTemplateComponent/FormTemplateComponent.vue";
+import { useUserStore } from "@/stores/UserStore/UserStore";
 
-const { singUpOwner } = useUserStore()
+const { singUpOwner } = useUserStore();
 
 const signUp = (payload: any): void => {
-  singUpOwner(payload)
+  singUpOwner(payload);
 };
 </script>

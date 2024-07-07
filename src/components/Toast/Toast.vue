@@ -1,5 +1,9 @@
 <template>
-  <v-snackbar :timeout="state.timeout" v-model="state.showToast" :color="state.color">
+  <v-snackbar
+    :timeout="state.timeout"
+    v-model="state.showToast"
+    :color="state.color"
+  >
     {{ state.message }}
 
     <template #actions>
@@ -11,23 +15,15 @@
 </template>
 
 <script setup lang="ts">
-import {reactive} from "vue"
-import { useToastStore } from "@/stores/components/ToastStore/ToastStore"
+import { reactive } from "vue";
+import { useToastStore } from "@/stores/components/ToastStore/ToastStore";
 
-
-const {
-  message,
-  timeout,
-  color, 
-  showToast
-} = useToastStore()
+const { message, timeout, color, showToast } = useToastStore();
 
 const state = reactive({
   message,
   color,
   showToast,
-  timeout
-})
-
-
+  timeout,
+});
 </script>

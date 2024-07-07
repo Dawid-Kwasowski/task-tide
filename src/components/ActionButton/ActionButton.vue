@@ -1,18 +1,17 @@
 <template>
-  <v-btn @click="$emit('action')" class="fab" >
+  <v-btn @click="$emit('action')" class="fab">
     <slot name="body"></slot>
-    
   </v-btn>
 </template>
 
 <script setup lang="ts">
-  defineEmits(['action'])
+defineEmits(["action"]);
 </script>
 
 <style scoped>
-  .fab {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-  }
+.fab {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
 </style>

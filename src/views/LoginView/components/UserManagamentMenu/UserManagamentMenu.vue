@@ -4,7 +4,11 @@
     transition="slide-x-transition"
     :activator="`#menu-activator-${index}`"
   >
-    <v-card class="my-2" :title="$t('auth.editProfiles.managamnet')" min-width="300">
+    <v-card
+      class="my-2"
+      :title="$t('auth.editProfiles.managamnet')"
+      min-width="300"
+    >
       <v-divider></v-divider>
 
       <v-card-text>

@@ -1,13 +1,12 @@
-import { TStatus } from "@/models/ITodo"
+import { TStatus } from "@/models/ITodo";
 
 export const mapStatus = (taskStatus: TStatus): string => {
+  const statusMap = {
+    ongoing: "red",
+    todo: "blue",
+    done: "green",
+    expired: "yellow",
+  };
 
-   const statusMap = {
-      'ongoing': 'red',
-      'todo': 'blue',
-      'done': 'green',
-      'expired': 'yellow',
-   }
-
-   return statusMap[taskStatus]
-}
+  return statusMap[taskStatus];
+};

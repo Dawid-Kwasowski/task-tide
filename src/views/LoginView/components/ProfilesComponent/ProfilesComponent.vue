@@ -1,7 +1,9 @@
 <template>
   <v-row>
     <v-col>
-      <h1 class="text-center text-h2 my-5">{{ $t("accounts.chooseProfile") }}</h1>
+      <h1 class="text-center text-h2 my-5">
+        {{ $t("accounts.chooseProfile") }}
+      </h1>
     </v-col>
   </v-row>
   <v-row justify="center">
@@ -47,7 +49,9 @@
             >
             </UserManagamentMenu>
 
-            <div class="position-absolute bg-black opacity-70 h-100 w-100"></div>
+            <div
+              class="position-absolute bg-black opacity-70 h-100 w-100"
+            ></div>
           </template>
           <template v-if="avatar_url">
             <v-img :src="avatar_url"></v-img>
@@ -97,11 +101,9 @@ const selectProfile = async (profile: IUserInfo): Promise<void> => {
   router.push({ path: "/" });
 };
 
-onBeforeMount(
-  async (): Promise<void> => {
-    await store.getProfiles();
-  }
-);
+onBeforeMount(async (): Promise<void> => {
+  await store.getProfiles();
+});
 
 const emit = defineEmits(["createProfile"]);
 </script>

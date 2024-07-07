@@ -15,10 +15,9 @@
         <div class="d-flex flex-column">
           <div>{{ $t("home.bar.hello") }}</div>
           <div>{{ user.username }}</div>
-
         </div>
       </div>
-      <v-btn @click="logoutProfile" class="mx-2" icon>
+      <v-btn @click="logoutProfile" class="mx-2" variant="text" icon>
         <v-icon icon="mdi-logout"></v-icon>
       </v-btn>
     </div>
@@ -48,15 +47,26 @@
     </v-row>
   </v-container>
 
-  <action-button id="btn" color="primary" :disabled="!selectedDay">
+  <action-button
+    @click="taskFormDialog = true"
+    color="primary"
+    :disabled="!selectedDay"
+  >
     <template #body>
       <v-icon class="mr-2" icon="mdi-plus"></v-icon>
       {{ $t("home.fab.t") }}
     </template>
   </action-button>
 
-
-  <task-form :creator_id="user.user_id" :deadline="formatedDate" activator="#btn" title="Nowe Zadanie"></task-form>
+  <Dialog v-model="taskFormDialog">
+    <template #header> {{ $t("home.task.t") }}</template>
+    <template #content>
+      <task-form
+        :creator_id="user.user_id"
+        :deadline="formatedDate"
+      ></task-form>
+    </template>
+  </Dialog>
 </template>
 
 <script lang="ts" setup>
@@ -72,7 +82,8 @@ import { mapStatus } from "@/utils/colorStatus";
 import { useUserStore } from "@/stores/UserStore/UserStore";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
-import {supabase} from "@/plugins/supabase";
+import { supabase } from "@/plugins/supabase";
+import Dialog from "@/components/Dialog/Dialog.vue";
 
 const userStore = useUserStore();
 
@@ -87,6 +98,8 @@ const selectedDay = ref<Date | number>(new Date());
 
 const skeleton = ref(true);
 
+const taskFormDialog = ref(false);
+
 const formatedDate = computed(() => {
   if (!selectedDay.value) return "";
   return format(selectedDay.value, "yyyy-MM-dd");
@@ -94,20 +107,22 @@ const formatedDate = computed(() => {
 
 const selectedDayContent = computed((): ITodo[] => {
   return selectedDay.value
-    ? todos.value.filter(({ deadline }): boolean => deadline === formatedDate.value)
+    ? todos.value.filter(
+        ({ deadline }): boolean => deadline === formatedDate.value,
+      )
     : [];
 });
 
 const logoutProfile = async () => {
   await userStore.removeUserInfo();
-  route.push({ path: "/browse" });
+  await route.push({ path: "/browse" });
 };
 
 const attributes = computed(() => [
   ...todos.value.map((todo) => ({
     dates: todo.deadline,
     dot: {
-      color: mapStatus(todo.status),
+      color: mapStatus(todo?.status),
     },
     popover: {
       label: todo.title,
@@ -117,15 +132,16 @@ const attributes = computed(() => [
 
 onMounted(async () => {
   await todosStore.getTask();
-  supabase.channel('tasks-all-channel')
+  supabase
+    .channel("tasks-all-channel")
     .on(
       "postgres_changes",
-      { event: 'INSERT', schema: 'public', table: 'tasks' },
+      { event: "*", schema: "public", table: "tasks" },
       async () => {
         await todosStore.getTask();
-      }
+      },
     )
-    .subscribe()
+    .subscribe();
 
   skeleton.value = false;
 });

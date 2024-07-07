@@ -2,7 +2,10 @@
   <v-navigation-drawer>
     <v-list>
       <div class="pa-2">
-        <v-list-item :prepend-avatar="user?.avatar" :title="user?.name"></v-list-item>
+        <v-list-item
+          :prepend-avatar="user?.avatar"
+          :title="user?.name"
+        ></v-list-item>
         <v-divider></v-divider>
       </div>
     </v-list>
