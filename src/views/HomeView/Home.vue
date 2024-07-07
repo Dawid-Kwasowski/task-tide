@@ -58,13 +58,15 @@
     </template>
   </action-button>
 
-  <task-form
-    v-model="taskFormDialog"
-    :creator_id="user.user_id"
-    :deadline="formatedDate"
-    activator="#btn"
-    header="Nowe Zadanie"
-  ></task-form>
+  <Dialog v-model="taskFormDialog">
+    <template #header> {{ $t("home.task.t") }}</template>
+    <template #content>
+      <task-form
+        :creator_id="user.user_id"
+        :deadline="formatedDate"
+      ></task-form>
+    </template>
+  </Dialog>
 </template>
 
 <script lang="ts" setup>
@@ -75,12 +77,13 @@ import DayManagement from "./components/DayManagement.vue";
 import ActionButton from "@/components/ActionButton/ActionButton.vue";
 import TaskForm from "./components/TaskForm/TaskForm.vue";
 import { useCalendarStore } from "@/stores/CalendarStore/CalendarStore";
-import { ITodo, TStatus } from "@/models/ITodo";
+import { ITodo } from "@/models/ITodo";
 import { mapStatus } from "@/utils/colorStatus";
 import { useUserStore } from "@/stores/UserStore/UserStore";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { supabase } from "@/plugins/supabase";
+import Dialog from "@/components/Dialog/Dialog.vue";
 
 const userStore = useUserStore();
 
@@ -112,14 +115,14 @@ const selectedDayContent = computed((): ITodo[] => {
 
 const logoutProfile = async () => {
   await userStore.removeUserInfo();
-  route.push({ path: "/browse" });
+  await route.push({ path: "/browse" });
 };
 
 const attributes = computed(() => [
   ...todos.value.map((todo) => ({
     dates: todo.deadline,
     dot: {
-      color: mapStatus(<TStatus>todo.status),
+      color: mapStatus(todo?.status),
     },
     popover: {
       label: todo.title,

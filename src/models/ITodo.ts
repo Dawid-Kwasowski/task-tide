@@ -1,7 +1,7 @@
 export interface ITodo {
   created_at?: string;
   creator_id?: string;
-  deadline?: Date | string;
+  deadline: Date | string;
   description?: string;
   status?: TStatus;
   title?: string;

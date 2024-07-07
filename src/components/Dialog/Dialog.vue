@@ -13,7 +13,7 @@ const dialog = defineModel<boolean>();
           <slot name="content"></slot>
         </slot>
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions v-if="$slots.actions">
         <slot name="actions"></slot>
       </v-card-actions>
     </v-card>

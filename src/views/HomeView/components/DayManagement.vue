@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import type { IDayManagement } from "./models/IDayManagement";
 import { useCalendarStore } from "@/stores/CalendarStore/CalendarStore";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog.vue";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import TaskForm from "@/views/HomeView/components/TaskForm/TaskForm.vue";
 import { ITodo } from "@/models/ITodo";
+import Dialog from "@/components/Dialog/Dialog.vue";
 const { t } = useI18n();
 const store = useCalendarStore();
 
 const confirmDialog = ref(false);
-const selectedTask = ref<ITodo | null>(null);
+const selectedTask = ref<ITodo>();
 const taskFormEditDialog = ref(false);
 
 const confirmDialogTitle = t("home.task.confirmDialogTitle");
@@ -23,7 +25,7 @@ const deleteTask = (): void => {
 
 const props = defineProps<{
   data: IDayManagement[];
-  selectedDate: Date | string | Date[] | string[];
+  selectedDate: string;
 }>();
 </script>
 
@@ -109,11 +111,20 @@ const props = defineProps<{
     v-model="confirmDialog"
   ></confirm-dialog>
 
-  <!--  <task-form-->
-  <!--    :title="selectedTask?.title"-->
-  <!--    :creator_id="selectedTask?.creator_id"-->
-  <!--    :deadline="selectedTask?.deadline?.toString()"-->
-  <!--    :id="selectedTask?.id"-->
-  <!--    :description="selectedTask?.description"-->
-  <!--    v-model="taskFormEditDialog" :edit-mode="true"  header="Edytuj zadanie"></task-form>-->
+  <Dialog v-model="taskFormEditDialog">
+    <template #header>
+      {{ $t("home.task.editMode") }}
+    </template>
+    <template #content>
+      <task-form
+        @edit="taskFormEditDialog = false"
+        :edit-mode="true"
+        :title="selectedTask?.title"
+        :creator_id="selectedTask?.creator_id"
+        :deadline="selectedTask!.deadline"
+        :id="selectedTask?.id"
+        :description="selectedTask?.description"
+      ></task-form>
+    </template>
+  </Dialog>
 </template>
