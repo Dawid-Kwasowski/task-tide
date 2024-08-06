@@ -32,6 +32,13 @@ export default defineConfig({
         short_name: "TaskTide",
         description: "Very Simple Schedule system",
         theme_color: "#D1DEDE",
+        icons: [
+          {
+            src: "favicon.ico",
+            sizes: "16x16",
+            type: "image/x-icon",
+          },
+        ],
       },
 
       workbox: {
