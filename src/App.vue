@@ -6,6 +6,7 @@
         <router-view></router-view>
       </v-main>
     </v-app>
+    <v-footer>Beta Version: 1.0.0</v-footer>
   </v-responsive>
 </template>
 
