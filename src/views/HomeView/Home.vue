@@ -25,7 +25,8 @@
 
   <v-container>
     <v-row>
-      <template v-if="skeleton">
+      <template v-if="skeleton"
+        >rr
         <v-skeleton-loader width="100%" type="card"></v-skeleton-loader>
       </template>
       <template v-else>
@@ -122,7 +123,7 @@ const attributes = computed(() => [
   ...todos.value.map((todo) => ({
     dates: todo.deadline,
     dot: {
-      color: mapStatus(todo?.status),
+      color: mapStatus(todo?.status || "todo"),
     },
     popover: {
       label: todo.title,
