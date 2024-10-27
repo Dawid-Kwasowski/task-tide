@@ -101,16 +101,6 @@ const skeleton = ref(true);
 
 const taskFormDialog = ref(false);
 
-// const testFunc = async () => {
-//   const { data } = await supabase
-//     .from("profiles")
-//     .select("fcm_token")
-//     .eq("user_id", "ea68b4be-083f-4bc4-90fb-57b6f53cdd4a")
-//     .single();
-//
-//   console.log("test", data);
-// };
-
 const formatedDate = computed(() => {
   if (!selectedDay.value) return "";
   return format(selectedDay.value, "yyyy-MM-dd");
