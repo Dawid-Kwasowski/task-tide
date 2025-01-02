@@ -8,6 +8,11 @@ const errors = {
   conflict: "Taki użytkownik już istnieje!",
 };
 
+const navigation = {
+  general: "Ogólne",
+  duties: "Obciążenia służbowe",
+};
+
 export const messages = {
   pl: {
     app: {
@@ -19,7 +24,7 @@ export const messages = {
       signInTab: "Zaloguj się",
       signUpTab: "Stwórz konto",
       editProfiles: {
-        managamnet: "Zardządzaj profilami",
+        management: "Zardządzaj profilami",
         editName: "Edytuj imię",
         deleteProfile: "Usuń użytkownika",
         editAvatar: "Edytuj zdjęcie",
@@ -58,6 +63,7 @@ export const messages = {
       },
       bar: {
         hello: "Witaj!",
+        navigation,
       },
       task: {
         t: "Nowe zadanie",
@@ -72,6 +78,21 @@ export const messages = {
         confirmDialogTitle: "Usunąć zaznaczone zadanie?",
         confirmDialogContent:
           "Zadanie zostanie usunięte na stałe, czy chcesz to zrobić?",
+      },
+      duty: {
+        t: "Obecne Obowiązki",
+        rotation: "Rotacja",
+        dialog: {
+          t: "Rotacja Obowiązków",
+          fields: {
+            user: "Użytkownik",
+            duty: "Obowiązek",
+          },
+          actions: {
+            change: "Zmień kolejność",
+            cancel: "Anuluj",
+          },
+        },
       },
     },
   },

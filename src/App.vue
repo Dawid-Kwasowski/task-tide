@@ -9,5 +9,3 @@
     <v-footer>Beta Version: 1.0.0</v-footer>
   </v-responsive>
 </template>
-
-<script setup lang="ts"></script>

@@ -70,7 +70,7 @@
   <v-row v-if="userList.length > 0" justify="center">
     <v-col cols="auto">
       <v-btn @click="toggleEditMode" prepend-icon="mdi-pencil">{{
-        $t("auth.editProfiles.managamnet")
+        $t("auth.editProfiles.management")
       }}</v-btn>
     </v-col>
   </v-row>

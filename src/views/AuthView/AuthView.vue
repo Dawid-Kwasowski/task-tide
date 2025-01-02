@@ -11,10 +11,10 @@
             </div>
             <v-tabs fixed-tabs grow v-model="tab">
               <v-tab value="signInTab">
-                {{ $t("auth.signInTab") }}
+                {{ t("auth.signInTab") }}
               </v-tab>
               <v-tab value="signUpTab">
-                {{ $t("auth.signUpTab") }}
+                {{ t("auth.signUpTab") }}
               </v-tab>
             </v-tabs>
             <v-divider :thickness="10"></v-divider>
@@ -40,5 +40,7 @@
 import { ref } from "vue";
 import SignUpComponent from "./components/SignUpComponent/SignUpComponent.vue";
 import SignInComponent from "./components/SignInComponent/SignInComponent.vue";
+import { useI18n } from "vue-i18n";
 const tab = ref(null);
+const { t } = useI18n();
 </script>

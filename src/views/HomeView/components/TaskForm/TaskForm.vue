@@ -61,11 +61,11 @@ import type { ITodo } from "@/models/ITodo";
 import { useForm } from "vee-validate";
 import { string, object } from "yup";
 import { useI18n } from "vue-i18n";
-import { useCalendarStore } from "@/stores/CalendarStore/CalendarStore";
+import { useTaskStore } from "@/stores/TaskStore/TasksStore";
 
 const { t } = useI18n();
 
-const { addTask, editTask } = useCalendarStore();
+const { addTask, editTask } = useTaskStore();
 
 const props = withDefaults(defineProps<ITaskForm>(), {
   editMode: false,

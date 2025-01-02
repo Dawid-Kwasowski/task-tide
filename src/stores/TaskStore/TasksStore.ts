@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
-import { ICalendarState } from "./model/ICalendarState";
+import { ITaskStore } from "./model/ITaskStore";
 import { ITodo } from "@/models/ITodo";
 import { getTime, closestTo, format } from "date-fns";
 import { supabase } from "@/plugins/supabase";
-export const useCalendarStore = defineStore("CalendarStore", {
-  state: (): ICalendarState => ({
+export const useTaskStore = defineStore("TaskStore", {
+  state: (): ITaskStore => ({
     todos: [],
   }),
   getters: {
@@ -65,7 +65,6 @@ export const useCalendarStore = defineStore("CalendarStore", {
         const { data: tasks, error } = await supabase.from("tasks").select("*");
 
         if (error) throw error;
-        console.log("tasks", tasks);
         this.todos = tasks;
       } catch (err) {
         console.log(err);

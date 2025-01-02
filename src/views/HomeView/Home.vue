@@ -1,138 +1,90 @@
 <template>
-  <v-app-bar color="primary" prominent>
-    <div class="d-flex align-center justify-space-between w-100">
-      <div class="d-flex align-center">
-        <v-avatar class="mx-2" color="surface-variant">
-          <template v-if="user.avatar_url">
-            <v-img :src="user.avatar_url"></v-img>
-          </template>
-          <template v-else>
-            <span class="text-h5">
-              {{ user.username.charAt(0).toUpperCase() }}
-            </span>
-          </template>
-        </v-avatar>
-        <div class="d-flex flex-column">
-          <div>{{ $t("home.bar.hello") }}</div>
-          <div>{{ user.username }}</div>
+  <div>
+    <v-app-bar color="primary" prominent>
+      <div class="d-flex align-center justify-space-between w-100">
+        <div class="d-flex align-center">
+          <v-app-bar-nav-icon
+            @click.stop="drawer = !drawer"
+            class="mx-2"
+            variant="text"
+          ></v-app-bar-nav-icon>
+          <v-avatar class="mx-2" color="surface-variant">
+            <template v-if="user.avatar_url">
+              <v-img :src="user.avatar_url"></v-img>
+            </template>
+            <template v-else>
+              <span class="text-h5">
+                {{ user.username.charAt(0).toUpperCase() }}
+              </span>
+            </template>
+          </v-avatar>
+          <div class="d-flex flex-column">
+            <div>{{ t("home.bar.hello") }}</div>
+            <div>{{ user.username }}</div>
+          </div>
         </div>
+        <v-btn @click="logoutProfile" class="mx-2" variant="text" icon>
+          <v-icon icon="mdi-logout"></v-icon>
+        </v-btn>
       </div>
-      <v-btn @click="logoutProfile" class="mx-2" variant="text" icon>
-        <v-icon icon="mdi-logout"></v-icon>
-      </v-btn>
-    </div>
-  </v-app-bar>
-
-  <v-container>
-    <v-row>
-      <template v-if="skeleton"
-        >rr
-        <v-skeleton-loader width="100%" type="card"></v-skeleton-loader>
-      </template>
-      <template v-else>
-        <DatePicker
-          class="bg-primary"
-          is-dark="system"
-          v-model="selectedDay"
-          :attributes="attributes"
-          expanded
+    </v-app-bar>
+    <v-navigation-drawer v-model="drawer" absolute>
+      <v-list density="compact" nav>
+        <v-list-item
+          @click="route.push({ name: value })"
+          exact
+          :lines="false"
+          :value="value"
+          v-for="{ title, value } in items"
+          :key="value"
         >
-          <template #footer>
-            <day-management
-              :selected-date="formatedDate"
-              :data="selectedDayContent"
-            ></day-management>
-          </template>
-        </DatePicker>
-      </template>
-    </v-row>
-  </v-container>
-
-  <action-button
-    @click="taskFormDialog = true"
-    color="primary"
-    :disabled="!selectedDay"
-  >
-    <template #body>
-      <v-icon class="mr-2" icon="mdi-plus"></v-icon>
-      {{ $t("home.fab.t") }}
-    </template>
-  </action-button>
-
-  <Dialog v-model="taskFormDialog">
-    <template #header> {{ $t("home.task.t") }}</template>
-    <template #content>
-      <task-form
-        :creator_id="user.user_id"
-        :deadline="formatedDate"
-      ></task-form>
-    </template>
-  </Dialog>
+          <v-list-item-title> {{ t(title) }} </v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+    <router-view />
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { DatePicker } from "v-calendar";
-import { ref, computed, onMounted } from "vue";
-import { format } from "date-fns";
-import DayManagement from "./components/DayManagement.vue";
-import ActionButton from "@/components/ActionButton/ActionButton.vue";
-import TaskForm from "./components/TaskForm/TaskForm.vue";
-import { useCalendarStore } from "@/stores/CalendarStore/CalendarStore";
-import { ITodo } from "@/models/ITodo";
-import { mapStatus } from "@/utils/colorStatus";
+import { onMounted, ref } from "vue";
+import { supabase } from "@/plugins/supabase";
 import { useUserStore } from "@/stores/UserStore/UserStore";
+import { useTaskStore } from "@/stores/TaskStore/TasksStore";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
-import { supabase } from "@/plugins/supabase";
-import Dialog from "@/components/Dialog/Dialog.vue";
-
-const userStore = useUserStore();
-
-const todosStore = useCalendarStore();
-
-const { todos } = storeToRefs(todosStore);
-const { user } = storeToRefs(userStore);
+import { useI18n } from "vue-i18n";
+import { useDutyStore } from "@/stores/DutyStore/DutyStore";
 
 const route = useRouter();
+const { t } = useI18n();
+const userStore = useUserStore();
+const todosStore = useTaskStore();
+const dutiesStore = useDutyStore();
 
-const selectedDay = ref<Date | number>(new Date());
+const { user } = storeToRefs(userStore);
 
-const skeleton = ref(true);
-
-const taskFormDialog = ref(false);
-
-const formatedDate = computed(() => {
-  if (!selectedDay.value) return "";
-  return format(selectedDay.value, "yyyy-MM-dd");
-});
-
-const selectedDayContent = computed((): ITodo[] => {
-  return selectedDay.value
-    ? todos.value.filter(
-        ({ deadline }): boolean => deadline === formatedDate.value,
-      )
-    : [];
-});
+const drawer = ref(false);
 
 const logoutProfile = async () => {
   await userStore.removeUserInfo();
   await route.push({ path: "/browse" });
 };
 
-const attributes = computed(() => [
-  ...todos.value.map((todo) => ({
-    dates: todo.deadline,
-    dot: {
-      color: mapStatus(todo?.status || "todo"),
-    },
-    popover: {
-      label: todo.title,
-    },
-  })),
-]);
-
+const items = route
+  .getRoutes()
+  .filter((route) => {
+    return route.path.startsWith("/dashboard/");
+  })
+  .map(({ name }) => ({
+    title: `home.bar.navigation.${name as String}`,
+    value: name,
+  }));
 onMounted(async () => {
   await todosStore.getTask();
+  await dutiesStore.getDuties();
+  await userStore.getProfiles();
+
   supabase
     .channel("tasks-all-channel")
     .on(
@@ -144,6 +96,26 @@ onMounted(async () => {
     )
     .subscribe();
 
-  skeleton.value = false;
+  supabase
+    .channel("custom-all-channel")
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "rooms" },
+      (payload) => {
+        console.log("Change received!", payload);
+      },
+    )
+    .subscribe();
+
+  supabase
+    .channel("duties-all-channel")
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "duties" },
+      async () => {
+        await dutiesStore.getDuties();
+      },
+    )
+    .subscribe();
 });
 </script>

@@ -3,18 +3,32 @@ import { supabase } from "@/plugins/supabase";
 import { createRouter, createWebHistory } from "vue-router";
 const routes = [
   {
-    path: "/",
+    path: "",
+    redirect: "/dashboard",
+  },
+  {
+    path: "/dashboard",
+    redirect: "/duty-dashboard",
     children: [
       {
         path: "",
-        name: "Home",
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
+        redirect: "/dashboard/general",
+      },
+      {
+        path: "general",
+        name: "general",
         component: () =>
-          import(/* webpackChunkName: "home" */ "@/views/HomeView/Home.vue"),
+          import("@/views/HomeView/views/DashboardView/DashboardView.vue"),
+      },
+      {
+        path: "duties",
+        name: "duties",
+        component: () =>
+          import("@/views/HomeView/views/DutiesView/DutiesView.vue"),
       },
     ],
+    component: () =>
+      import(/* webpackChunkName: "home" */ "@/views/HomeView/Home.vue"),
   },
   {
     path: "/auth",

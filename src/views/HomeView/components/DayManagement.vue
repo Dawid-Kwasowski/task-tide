@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IDayManagement } from "./models/IDayManagement";
-import { useCalendarStore } from "@/stores/CalendarStore/CalendarStore";
+import { useTaskStore } from "@/stores/TaskStore/TasksStore";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog.vue";
 import { ref } from "vue";
@@ -9,7 +9,7 @@ import TaskForm from "@/views/HomeView/components/TaskForm/TaskForm.vue";
 import { ITodo } from "@/models/ITodo";
 import Dialog from "@/components/Dialog/Dialog.vue";
 const { t } = useI18n();
-const store = useCalendarStore();
+const store = useTaskStore();
 
 const confirmDialog = ref(false);
 const selectedTask = ref<ITodo>();
