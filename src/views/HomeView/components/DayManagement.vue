@@ -37,7 +37,7 @@ const props = defineProps<{
         <v-col cols="12">
           <template v-if="props.data.length > 0">
             <div class="text-subtitle-4 mb-2">
-              {{ $t("home.task.todayList") }}
+              {{ t("home.task.todayList") }}
             </div>
             <v-list rounded>
               <v-list-item v-for="(task, index) in props.data" :key="index">
@@ -92,7 +92,7 @@ const props = defineProps<{
             <v-list density="compact" rounded>
               <v-list-item
                 ><span class="mr-2">
-                  {{ $t("home.task.emptyList") }}</span
+                  {{ t("home.task.emptyList") }}</span
                 ></v-list-item
               >
             </v-list>
@@ -113,7 +113,7 @@ const props = defineProps<{
 
   <Dialog v-model="taskFormEditDialog">
     <template #header>
-      {{ $t("home.task.editMode") }}
+      {{ t("home.task.editMode") }}
     </template>
     <template #content>
       <task-form

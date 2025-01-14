@@ -97,10 +97,7 @@ const attributes = computed(() => [
   <Dialog v-model="taskFormDialog">
     <template #header> {{ t("home.task.t") }}</template>
     <template #content>
-      <task-form
-        :creator_id="user.user_id"
-        :deadline="formatedDate"
-      ></task-form>
+      <task-form :creator_id="user.user_id" :deadline="formatedDate" />
     </template>
   </Dialog>
 </template>

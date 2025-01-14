@@ -6,7 +6,7 @@
   >
     <v-card
       class="my-2"
-      :title="$t('auth.editProfiles.managamnet')"
+      :title="t('auth.editProfiles.management')"
       min-width="300"
     >
       <v-divider></v-divider>

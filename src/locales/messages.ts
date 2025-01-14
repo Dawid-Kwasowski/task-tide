@@ -80,18 +80,21 @@ export const messages = {
           "Zadanie zostanie usunięte na stałe, czy chcesz to zrobić?",
       },
       duty: {
-        t: "Obecne Obowiązki",
+        t: "Obciążenia służbowe",
         rotation: "Rotacja",
-        dialog: {
-          t: "Rotacja Obowiązków",
-          fields: {
-            user: "Użytkownik",
-            duty: "Obowiązek",
-          },
-          actions: {
-            change: "Zmień kolejność",
-            cancel: "Anuluj",
-          },
+        list: {
+          empty: "Brak przypisanych obowiązków",
+        },
+        confirmDialogTitle: "Usunąć zaznaczony obowiązek?",
+        confirmDialogContent:
+          "Obowiązek zostanie usunięty na stałe, czy chcesz to zrobić?",
+        dutyForm: {
+          newDuty: "Nowy obowiązek",
+          editDuty: "Edytuj zadanie",
+          title: "Tytuł",
+          description: "Opis",
+          add: "Dodaj",
+          edit: "Zmień",
         },
       },
     },

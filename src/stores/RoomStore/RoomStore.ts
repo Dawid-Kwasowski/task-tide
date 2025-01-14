@@ -1,19 +1,65 @@
 import { defineStore } from "pinia";
 import { supabase } from "@/plugins/supabase";
+import { IRooms } from "@/stores/RoomStore/model/IRooms";
+import { IDuty } from "@/stores/RoomStore/model/IDuty";
 
-const useRoomStore = defineStore("RoomStore", {
+export const useRoomStore = defineStore("RoomStore", {
   state: (): {
-    rooms: any[];
+    rooms: IRooms[];
   } => ({
     rooms: [],
   }),
   actions: {
     getRooms: async function () {
+      const { data, error } = await supabase
+        .from("rooms")
+        .select(
+          "*, duties (title, description, id, state, exp_time), profiles (username, avatar_url)",
+        );
+      console.log(error);
+      this.rooms = <IRooms[]>data;
+    },
+
+    addDutyToRoom: async function (payload: IDuty) {
       try {
-        const { data: rooms, error } = await supabase.from("rooms").select("*");
-        this.rooms = <any[]>rooms;
-      } catch (e: any) {
-        console.error("Error during rooms fetching:", e);
+        const { error } = await supabase
+          .from("duties")
+          .insert([
+            {
+              title: payload.title,
+              description: payload.description,
+              room_id: payload.room_id,
+            },
+          ])
+          .select();
+
+        console.log(error);
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    editDuty: async function (payload: IDuty) {
+      try {
+        console.log("payload", payload);
+        const { error } = await supabase
+          .from("duties")
+          .update({
+            title: payload.title,
+            description: payload.description,
+          })
+          .eq("id", payload.id)
+          .select();
+        console.log(error);
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    removeDuty: async function (id: string) {
+      try {
+        const { error } = await supabase.from("duties").delete().eq("id", id);
+        console.log(error);
+      } catch (err) {
+        console.error(err);
       }
     },
   },

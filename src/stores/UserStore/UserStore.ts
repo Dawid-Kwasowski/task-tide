@@ -21,8 +21,6 @@ export const useUserStore = defineStore("UserStore", {
           .from("profiles")
           .select(`user_id, username, avatar_url`);
         if (error && status !== 406) throw error;
-
-        console.log(data);
         if (data) {
           this.userList = <any>data;
         }

@@ -48,19 +48,19 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
-import { supabase } from "@/plugins/supabase";
 import { useUserStore } from "@/stores/UserStore/UserStore";
 import { useTaskStore } from "@/stores/TaskStore/TasksStore";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { useDutyStore } from "@/stores/DutyStore/DutyStore";
+import { useRoomStore } from "@/stores/RoomStore/RoomStore";
+import { supabase } from "@/plugins/supabase";
 
 const route = useRouter();
 const { t } = useI18n();
 const userStore = useUserStore();
 const todosStore = useTaskStore();
-const dutiesStore = useDutyStore();
+const roomsStore = useRoomStore();
 
 const { user } = storeToRefs(userStore);
 
@@ -82,9 +82,8 @@ const items = route
   }));
 onMounted(async () => {
   await todosStore.getTask();
-  await dutiesStore.getDuties();
+  await roomsStore.getRooms();
   await userStore.getProfiles();
-
   supabase
     .channel("tasks-all-channel")
     .on(
@@ -97,23 +96,23 @@ onMounted(async () => {
     .subscribe();
 
   supabase
-    .channel("custom-all-channel")
-    .on(
-      "postgres_changes",
-      { event: "*", schema: "public", table: "rooms" },
-      (payload) => {
-        console.log("Change received!", payload);
-      },
-    )
-    .subscribe();
-
-  supabase
     .channel("duties-all-channel")
     .on(
       "postgres_changes",
       { event: "*", schema: "public", table: "duties" },
       async () => {
-        await dutiesStore.getDuties();
+        await roomsStore.getRooms();
+      },
+    )
+    .subscribe();
+
+  supabase
+    .channel("rooms-all-channel")
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "rooms" },
+      async () => {
+        await roomsStore.getRooms();
       },
     )
     .subscribe();
