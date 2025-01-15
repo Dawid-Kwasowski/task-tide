@@ -88,6 +88,7 @@ export const messages = {
         confirmDialogTitle: "Usunąć zaznaczony obowiązek?",
         confirmDialogContent:
           "Obowiązek zostanie usunięty na stałe, czy chcesz to zrobić?",
+        addRoom: "Dodaj pokój",
         dutyForm: {
           newDuty: "Nowy obowiązek",
           editDuty: "Edytuj zadanie",

@@ -20,6 +20,12 @@ export const useRoomStore = defineStore("RoomStore", {
       this.rooms = <IRooms[]>data;
     },
 
+    rotateUsers: async function () {
+      const { data, error } = await supabase.rpc("rotate_user_assignments");
+      if (error) console.error(error);
+      else console.log(data);
+    },
+
     addDutyToRoom: async function (payload: IDuty) {
       try {
         const { error } = await supabase
