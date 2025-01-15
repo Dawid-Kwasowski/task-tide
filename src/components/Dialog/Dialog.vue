@@ -3,7 +3,11 @@ const dialog = defineModel<boolean>();
 </script>
 
 <template>
-  <v-dialog v-model="dialog" transition="dialog-bottom-transition">
+  <v-dialog
+    class="container"
+    v-model="dialog"
+    transition="dialog-bottom-transition"
+  >
     <v-card>
       <v-card-title class="text-center">
         <slot name="header"></slot>
@@ -19,3 +23,9 @@ const dialog = defineModel<boolean>();
     </v-card>
   </v-dialog>
 </template>
+
+<style>
+.container {
+  max-width: 1000px;
+}
+</style>

@@ -18,7 +18,7 @@
             :error-messages="errors.title"
             v-bind="emailAttrs"
             v-model="title"
-            :label="$t('home.task.placeholder')"
+            :label="t('home.task.placeholder')"
             variant="solo-filled"
           ></v-text-field>
         </v-col>
@@ -31,7 +31,7 @@
             v-model="description"
             v-bind="descriptionAttrs"
             clearable
-            :label="$t('home.task.description')"
+            :label="t('home.task.description')"
             prepend-icon="mdi-pencil"
             variant="solo"
           ></v-textarea>
@@ -43,7 +43,7 @@
             type="submit"
             class="mb-2"
             :text="
-              $t(props.editMode ? 'home.task.editMode' : 'home.task.addTask')
+              t(props.editMode ? 'home.task.editMode' : 'home.task.addTask')
             "
             :append-icon="props.editMode ? 'mdi-pencil' : 'mdi-plus'"
             block
@@ -61,11 +61,11 @@ import type { ITodo } from "@/models/ITodo";
 import { useForm } from "vee-validate";
 import { string, object } from "yup";
 import { useI18n } from "vue-i18n";
-import { useCalendarStore } from "@/stores/CalendarStore/CalendarStore";
+import { useTaskStore } from "@/stores/TaskStore/TasksStore";
 
 const { t } = useI18n();
 
-const { addTask, editTask } = useCalendarStore();
+const { addTask, editTask } = useTaskStore();
 
 const props = withDefaults(defineProps<ITaskForm>(), {
   editMode: false,

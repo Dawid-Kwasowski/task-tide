@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IDayManagement } from "./models/IDayManagement";
-import { useCalendarStore } from "@/stores/CalendarStore/CalendarStore";
+import { useTaskStore } from "@/stores/TaskStore/TasksStore";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog.vue";
 import { ref } from "vue";
@@ -9,7 +9,7 @@ import TaskForm from "@/views/HomeView/components/TaskForm/TaskForm.vue";
 import { ITodo } from "@/models/ITodo";
 import Dialog from "@/components/Dialog/Dialog.vue";
 const { t } = useI18n();
-const store = useCalendarStore();
+const store = useTaskStore();
 
 const confirmDialog = ref(false);
 const selectedTask = ref<ITodo>();
@@ -37,7 +37,7 @@ const props = defineProps<{
         <v-col cols="12">
           <template v-if="props.data.length > 0">
             <div class="text-subtitle-4 mb-2">
-              {{ $t("home.task.todayList") }}
+              {{ t("home.task.todayList") }}
             </div>
             <v-list rounded>
               <v-list-item v-for="(task, index) in props.data" :key="index">
@@ -92,7 +92,7 @@ const props = defineProps<{
             <v-list density="compact" rounded>
               <v-list-item
                 ><span class="mr-2">
-                  {{ $t("home.task.emptyList") }}</span
+                  {{ t("home.task.emptyList") }}</span
                 ></v-list-item
               >
             </v-list>
@@ -113,7 +113,7 @@ const props = defineProps<{
 
   <Dialog v-model="taskFormEditDialog">
     <template #header>
-      {{ $t("home.task.editMode") }}
+      {{ t("home.task.editMode") }}
     </template>
     <template #content>
       <task-form

@@ -2,7 +2,7 @@
   <v-row>
     <v-col>
       <h1 class="text-center text-h2 my-5">
-        {{ $t("accounts.chooseProfile") }}
+        {{ t("accounts.chooseProfile") }}
       </h1>
     </v-col>
   </v-row>
@@ -18,7 +18,7 @@
           size="100"
           icon="$plus"
         ></v-btn>
-        <span class="text-center mt-5">{{ $t("accounts.createProfile") }}</span>
+        <span class="text-center mt-5">{{ t("accounts.createProfile") }}</span>
       </div>
     </v-col>
     <template v-if="userList.length > 0">
@@ -26,12 +26,12 @@
         cols="12"
         md="2"
         class="align-center justify-space-between d-flex flex-column"
-        :key="index"
-        v-for="({ username, avatar_url, user_id }, index) in userList"
+        :key="user_id"
+        v-for="{ username, avatar_url, user_id } in userList"
       >
         <v-avatar
           @click="selectProfile({ username, avatar_url, user_id })"
-          :id="`menu-activator-${index}`"
+          :id="`menu-activator-${user_id}`"
           class="cursor-pointer position-relative"
           color="surface-variant"
           size="100"
@@ -42,7 +42,7 @@
             </div>
 
             <UserManagamentMenu
-              :index="index"
+              :index="user_id"
               :user_id="user_id"
               :username="username"
               :avatar_url="avatar_url"
@@ -70,7 +70,7 @@
   <v-row v-if="userList.length > 0" justify="center">
     <v-col cols="auto">
       <v-btn @click="toggleEditMode" prepend-icon="mdi-pencil">{{
-        $t("auth.editProfiles.managamnet")
+        t("auth.editProfiles.management")
       }}</v-btn>
     </v-col>
   </v-row>
@@ -83,11 +83,13 @@ import { storeToRefs } from "pinia";
 import UserManagamentMenu from "../UserManagamentMenu/UserManagamentMenu.vue";
 import { IUserInfo } from "@/stores/UserStore/models/UserInfo";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 const store = useUserStore();
 
 const { userList } = storeToRefs(store);
 
 const router = useRouter();
+const { t } = useI18n();
 
 const editMode = ref(false);
 

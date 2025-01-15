@@ -1,4 +1,4 @@
 import type { ITodo } from "@/models/ITodo";
-export interface ICalendarState {
+export interface ITaskStore {
   todos: ITodo[];
 }
