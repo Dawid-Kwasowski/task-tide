@@ -17,3 +17,6 @@ export interface IRooms {
   duties: IDuty[];
   profiles: IProfile;
 }
+
+export type TRoomPayload = Pick<IRooms, "name" | "user_id">;
+export type TEditRoomPayload = Pick<IRooms, "name" | "user_id" | "room_id">;

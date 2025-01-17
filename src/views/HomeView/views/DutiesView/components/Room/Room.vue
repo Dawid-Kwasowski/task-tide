@@ -6,6 +6,7 @@ import { computed, ref } from "vue";
 import DutyForm from "@/views/HomeView/views/DutiesView/components/Room/components/DutyForm/DutyForm.vue";
 import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog.vue";
 import { useRoomStore } from "@/stores/RoomStore/RoomStore";
+import RoomForm from "@/views/HomeView/views/DutiesView/components/RoomForm/RoomForm.vue";
 
 const props = defineProps<IRoomsProps>();
 
@@ -18,6 +19,7 @@ const confirmDialogContent = t("home.duty.confirmDialogContent");
 
 const addFormDialog = ref(false);
 const editFormDialog = ref(false);
+const editRoomFormDialog = ref(false);
 const confirmDialog = ref(false);
 
 const selectedDuty = ref(undefined);
@@ -48,11 +50,26 @@ const removeDuty = () => {
   roomStore.removeDuty(selectedDuty.value.id);
   confirmDialog.value = false;
 };
+
+const openDutyDialog = () => {
+  addFormDialog.value = true;
+};
+
+const openRoomEditDialog = () => {
+  editRoomFormDialog.value = true;
+};
+
+const makeAction = () => {
+  props.editMode ? openRoomEditDialog() : openDutyDialog();
+};
+
+const actionIcon = computed(() => (props.editMode ? "mdi-pencil" : "mdi-plus"));
+const actionColor = computed(() => (props.editMode ? "warning" : "primary"));
 </script>
 
 <template>
-  <div class="ma-2">
-    <v-card min-width="300">
+  <div class="ma-4">
+    <v-card min-width="300" class="mx-2">
       <v-card-title class="d-flex align-center justify-space-between">
         <h3>{{ room.name }}</h3>
         <div class="d-flex justify-end ma-2">
@@ -99,7 +116,13 @@ const removeDuty = () => {
         </v-list>
       </v-card-item>
       <v-card-actions>
-        <v-btn @click="addFormDialog = true" block icon="mdi-plus"> </v-btn>
+        <v-btn
+          :color="actionColor"
+          @click="makeAction"
+          block
+          :icon="actionIcon"
+        >
+        </v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -110,6 +133,15 @@ const removeDuty = () => {
     </template>
     <template #content>
       <duty-form :room_id="room.room_id" />
+    </template>
+  </Dialog>
+
+  <Dialog v-model="editRoomFormDialog">
+    <template #header>
+      {{ t("home.duty.roomForm.editRoom") }}
+    </template>
+    <template #content>
+      <room-form :edit-mode="true" :room />
     </template>
   </Dialog>
 

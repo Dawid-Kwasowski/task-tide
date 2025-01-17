@@ -1,6 +1,10 @@
 import { defineStore } from "pinia";
 import { supabase } from "@/plugins/supabase";
-import { IRooms } from "@/stores/RoomStore/model/IRooms";
+import {
+  IRooms,
+  TEditRoomPayload,
+  TRoomPayload,
+} from "@/stores/RoomStore/model/IRooms";
 import { IDuty } from "@/stores/RoomStore/model/IDuty";
 
 export const useRoomStore = defineStore("RoomStore", {
@@ -11,15 +15,26 @@ export const useRoomStore = defineStore("RoomStore", {
   }),
   actions: {
     getRooms: async function () {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("rooms")
         .select(
           "*, duties (title, description, id, state, exp_time), profiles (username, avatar_url)",
         );
-      console.log(error);
       this.rooms = <IRooms[]>data;
     },
-
+    addRoom: async function (payload: TRoomPayload) {
+      const { data, error } = await supabase
+        .from("rooms")
+        .insert([payload])
+        .select();
+    },
+    editRoom: async function (payload: TEditRoomPayload) {
+      const { data, error } = await supabase
+        .from("rooms")
+        .update({ user_id: payload.user_id, name: payload.name })
+        .eq("room_id", payload.room_id)
+        .select();
+    },
     rotateUsers: async function () {
       const { data, error } = await supabase.rpc("rotate_user_assignments");
       if (error) console.error(error);
@@ -46,7 +61,6 @@ export const useRoomStore = defineStore("RoomStore", {
     },
     editDuty: async function (payload: IDuty) {
       try {
-        console.log("payload", payload);
         const { error } = await supabase
           .from("duties")
           .update({
