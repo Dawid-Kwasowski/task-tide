@@ -82,13 +82,31 @@ export const messages = {
       duty: {
         t: "Obciążenia służbowe",
         rotation: "Rotacja",
+        editModeOn: "Włącz tryb Edycji",
+        editModeOff: "Wyłącz tryb Edycji",
         list: {
           empty: "Brak przypisanych obowiązków",
         },
-        confirmDialogTitle: "Usunąć zaznaczony obowiązek?",
-        confirmDialogContent:
-          "Obowiązek zostanie usunięty na stałe, czy chcesz to zrobić?",
+        confirmRemoveRoom: {
+          t: "Chcesz usunąć pokój",
+          content: "Pokój zostanie usunięty na stałe, czy chcesz to zrobić?",
+        },
+        confirmRemoveDuty: {
+          t: "Usunąć zaznaczony obowiązek?",
+          content:
+            "Obowiązek zostanie usunięty na stałe, czy chcesz to zrobić?",
+        },
+
         addRoom: "Dodaj pokój",
+        roomList: {
+          empty: "Brak Pokoi",
+        },
+        roomForm: {
+          newRoom: "Dodaj pokój",
+          editRoom: "Edytuj pokój",
+          name: "Nazwa",
+          profiles: "Lista profili",
+        },
         dutyForm: {
           newDuty: "Nowy obowiązek",
           editDuty: "Edytuj zadanie",
