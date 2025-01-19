@@ -35,6 +35,12 @@ export const useRoomStore = defineStore("RoomStore", {
         .eq("room_id", payload.room_id)
         .select();
     },
+    removeRoom: async function (room_id: string) {
+      const { error } = await supabase
+        .from("rooms")
+        .delete()
+        .eq("room_id", room_id);
+    },
     rotateUsers: async function () {
       const { data, error } = await supabase.rpc("rotate_user_assignments");
       if (error) console.error(error);

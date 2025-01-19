@@ -87,9 +87,16 @@ export const messages = {
         list: {
           empty: "Brak przypisanych obowiązków",
         },
-        confirmDialogTitle: "Usunąć zaznaczony obowiązek?",
-        confirmDialogContent:
-          "Obowiązek zostanie usunięty na stałe, czy chcesz to zrobić?",
+        confirmRemoveRoom: {
+          t: "Chcesz usunąć pokój",
+          content: "Pokój zostanie usunięty na stałe, czy chcesz to zrobić?",
+        },
+        confirmRemoveDuty: {
+          t: "Usunąć zaznaczony obowiązek?",
+          content:
+            "Obowiązek zostanie usunięty na stałe, czy chcesz to zrobić?",
+        },
+
         addRoom: "Dodaj pokój",
         roomList: {
           empty: "Brak Pokoi",

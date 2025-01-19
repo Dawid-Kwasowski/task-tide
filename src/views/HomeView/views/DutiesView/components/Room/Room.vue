@@ -11,25 +11,21 @@ import RoomForm from "@/views/HomeView/views/DutiesView/components/RoomForm/Room
 const props = defineProps<IRoomsProps>();
 
 const room = computed(() => props.room);
-
 const { t } = useI18n();
 const roomStore = useRoomStore();
-const confirmDialogTitle = t("home.duty.confirmDialogTitle");
-const confirmDialogContent = t("home.duty.confirmDialogContent");
 
 const addFormDialog = ref(false);
 const editFormDialog = ref(false);
 const editRoomFormDialog = ref(false);
 const confirmDialog = ref(false);
+const confirmRemoveRoomDialog = ref(false);
 
+// Selected duty state
 const selectedDuty = ref(undefined);
 
-const openEditDialog = () => {
-  editFormDialog.value = true;
-};
-
-const openConfirmDialog = () => {
-  confirmDialog.value = true;
+// Utility functions
+const openDialog = (dialogRef: any) => {
+  dialogRef.value = true;
 };
 
 const assignDuty = (id: string) => {
@@ -37,32 +33,31 @@ const assignDuty = (id: string) => {
 };
 
 const editDuty = (id: string) => {
-  openEditDialog();
+  openDialog(editFormDialog);
   selectedDuty.value = assignDuty(id);
 };
 
 const prepareDutyToDelete = (id: string) => {
-  openConfirmDialog();
+  openDialog(confirmDialog);
   selectedDuty.value = assignDuty(id);
 };
 
 const removeDuty = () => {
-  roomStore.removeDuty(selectedDuty.value.id);
+  if (selectedDuty.value) {
+    roomStore.removeDuty(selectedDuty.value.id);
+  }
   confirmDialog.value = false;
 };
 
-const openDutyDialog = () => {
-  addFormDialog.value = true;
-};
-
-const openRoomEditDialog = () => {
-  editRoomFormDialog.value = true;
+const removeRoom = () => {
+  roomStore.removeRoom(props.room.room_id);
 };
 
 const makeAction = () => {
-  props.editMode ? openRoomEditDialog() : openDutyDialog();
+  props.editMode ? openDialog(editRoomFormDialog) : openDialog(addFormDialog);
 };
 
+// Computed properties
 const actionIcon = computed(() => (props.editMode ? "mdi-pencil" : "mdi-plus"));
 const actionColor = computed(() => (props.editMode ? "warning" : "primary"));
 </script>
@@ -71,13 +66,23 @@ const actionColor = computed(() => (props.editMode ? "warning" : "primary"));
   <div class="ma-4">
     <v-card min-width="300" class="mx-2">
       <v-card-title class="d-flex align-center justify-space-between">
-        <h3>{{ room.name }}</h3>
+        <div class="d-flex ga-3">
+          <v-btn
+            v-if="editMode"
+            icon="mdi-trash-can"
+            density="comfortable"
+            color="red"
+            @click="confirmRemoveRoomDialog = true"
+          ></v-btn>
+          <h3>{{ room.name }}</h3>
+        </div>
         <div class="d-flex justify-end ma-2">
-          <v-avatar v-for="key in room.profiles" :key>
-            <v-img :src="key"></v-img>
+          <v-avatar v-for="key in room.profiles" :key="key">
+            <v-img :src="key" />
           </v-avatar>
         </div>
       </v-card-title>
+
       <v-divider />
 
       <v-card-item>
@@ -91,18 +96,18 @@ const actionColor = computed(() => (props.editMode ? "warning" : "primary"));
             <template #append>
               <div>
                 <v-btn
-                  @click="editDuty(item.id)"
                   color="warning"
                   icon="mdi-pencil"
                   variant="text"
                   class="mx-1"
+                  @click="editDuty(item.id)"
                 ></v-btn>
                 <v-btn
-                  @click="prepareDutyToDelete(item.id)"
                   color="red"
                   icon="mdi-trash-can"
                   variant="text"
                   class="mx-1"
+                  @click="prepareDutyToDelete(item.id)"
                 ></v-btn>
               </div>
             </template>
@@ -115,42 +120,37 @@ const actionColor = computed(() => (props.editMode ? "warning" : "primary"));
           </template>
         </v-list>
       </v-card-item>
+
       <v-card-actions>
         <v-btn
-          :color="actionColor"
-          @click="makeAction"
           block
+          :color="actionColor"
           :icon="actionIcon"
-        >
-        </v-btn>
+          @click="makeAction"
+        ></v-btn>
       </v-card-actions>
     </v-card>
   </div>
-  <!--  Dialogs -->
+
+  <!-- Dialogs -->
   <Dialog v-model="addFormDialog">
-    <template #header>
-      {{ t("home.duty.dutyForm.newDuty") }}
-    </template>
+    <template #header>{{ t("home.duty.dutyForm.newDuty") }}</template>
     <template #content>
-      <duty-form :room_id="room.room_id" />
+      <DutyForm :room_id="room.room_id" />
     </template>
   </Dialog>
 
   <Dialog v-model="editRoomFormDialog">
-    <template #header>
-      {{ t("home.duty.roomForm.editRoom") }}
-    </template>
+    <template #header>{{ t("home.duty.roomForm.editRoom") }}</template>
     <template #content>
-      <room-form :edit-mode="true" :room />
+      <RoomForm :edit-mode="true" :room="room" />
     </template>
   </Dialog>
 
   <Dialog v-model="editFormDialog">
-    <template #header>
-      {{ t("home.duty.dutyForm.editDuty") }}
-    </template>
+    <template #header>{{ t("home.duty.dutyForm.editDuty") }}</template>
     <template #content>
-      <duty-form
+      <DutyForm
         :duty="selectedDuty"
         :edit_mode="editFormDialog"
         :room_id="room.room_id"
@@ -158,11 +158,17 @@ const actionColor = computed(() => (props.editMode ? "warning" : "primary"));
     </template>
   </Dialog>
 
-  <confirm-dialog
-    @confirm="removeDuty()"
-    @close="confirmDialog = false"
-    :content="confirmDialogContent"
-    :title="confirmDialogTitle"
+  <ConfirmDialog
     v-model="confirmDialog"
-  ></confirm-dialog>
+    :content="t('home.duty.confirmRemoveDuty.content')"
+    :title="t('home.duty.confirmRemoveDuty.t')"
+    @confirm="removeDuty"
+  />
+
+  <ConfirmDialog
+    v-model="confirmRemoveRoomDialog"
+    :content="t('home.duty.confirmRemoveRoom.content')"
+    :title="t('home.duty.confirmRemoveRoom.t')"
+    @confirm="removeRoom"
+  />
 </template>

@@ -20,6 +20,8 @@ const editMode = ref(false);
 const editButtonVariant = computed(() => (editMode.value ? "flat" : "text"));
 
 const atLeastOneRoom = computed(() => roomsStore.rooms.length > 0);
+
+const draggable = computed(() => editMode.value);
 </script>
 
 <template>
@@ -49,7 +51,7 @@ const atLeastOneRoom = computed(() => roomsStore.rooms.length > 0);
     <v-row>
       <template v-if="atLeastOneRoom">
         <v-col v-for="(value, key) in roomsStore.rooms" :key>
-          <room :edit-mode="editMode" :room="value" :name="key" />
+          <room :draggable :edit-mode="editMode" :room="value" :name="key" />
         </v-col>
       </template>
       <template v-else>
