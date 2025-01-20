@@ -7,6 +7,7 @@ import {
 } from "@/stores/RoomStore/model/IRooms";
 import { IDuty } from "@/stores/RoomStore/model/IDuty";
 import handleDatabaseAction from "@/utils/handleDatabaseAction";
+import { useToastStore } from "@/stores/components/ToastStore/ToastStore";
 
 export const useRoomStore = defineStore("RoomStore", {
   state: (): {
@@ -17,12 +18,20 @@ export const useRoomStore = defineStore("RoomStore", {
 
   actions: {
     async getRooms() {
-      const { data } = await supabase
-        .from("rooms")
-        .select(
-          "*, duties (title, description, id, state, exp_time), profiles (username, avatar_url)",
-        );
-      this.rooms = <IRooms[]>data;
+      const toast = useToastStore();
+      try {
+        const { data } = await supabase
+          .from("rooms")
+          .select(
+            "*, duties (title, description, id, state, exp_time), profiles (username, avatar_url)",
+          );
+        this.rooms = <IRooms[]>data;
+      } catch (error) {
+        await toast.show({
+          message: error.message,
+          color: "red",
+        });
+      }
     },
 
     async addRoom(payload: TRoomPayload) {
@@ -56,7 +65,7 @@ export const useRoomStore = defineStore("RoomStore", {
       await handleDatabaseAction(async () => {
         const { error } = await supabase.rpc("rotate_user_assignments");
         if (error) throw error;
-      }, "home.room.notification.usersRotated");
+      }, "home.room.notification.rotated");
     },
 
     async addDutyToRoom(payload: IDuty) {

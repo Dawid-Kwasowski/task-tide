@@ -90,6 +90,7 @@ export const messages = {
           created: "Pokój został utoworzony",
           edited: "Pokój został edytowany",
           deleted: "Pokój został usunięty",
+          rotated: "Wykonano rotacje",
         },
       },
       duty: {
