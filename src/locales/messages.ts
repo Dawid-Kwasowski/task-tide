@@ -6,6 +6,7 @@ const validationMessages = {
 
 const errors = {
   conflict: "Taki użytkownik już istnieje!",
+  codes: {},
 };
 
 const navigation = {
@@ -66,6 +67,11 @@ export const messages = {
         navigation,
       },
       task: {
+        notification: {
+          created: "Zadanie zostało utoworzone",
+          edited: "Zadanie zostało edytowane",
+          deleted: "Zadanie zostało usunięte",
+        },
         t: "Nowe zadanie",
         placeholder: "Tytuł zadania",
         todayList: "Lista zadań na dziś",
@@ -79,11 +85,23 @@ export const messages = {
         confirmDialogContent:
           "Zadanie zostanie usunięte na stałe, czy chcesz to zrobić?",
       },
+      room: {
+        notification: {
+          created: "Pokój został utoworzony",
+          edited: "Pokój został edytowany",
+          deleted: "Pokój został usunięty",
+        },
+      },
       duty: {
         t: "Obciążenia służbowe",
         rotation: "Rotacja",
         editModeOn: "Włącz tryb Edycji",
         editModeOff: "Wyłącz tryb Edycji",
+        notification: {
+          created: "Obowiązek został utoworzony",
+          edited: "Obowiązek został edytowany",
+          deleted: "Obowiązek został usunięty",
+        },
         list: {
           empty: "Brak przypisanych obowiązków",
         },

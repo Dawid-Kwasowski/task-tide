@@ -3,71 +3,69 @@ import { ITaskStore } from "./model/ITaskStore";
 import { ITodo } from "@/models/ITodo";
 import { getTime, closestTo, format } from "date-fns";
 import { supabase } from "@/plugins/supabase";
+import { useToastStore } from "@/stores/components/ToastStore/ToastStore";
+import handleDatabaseAction from "@/utils/handleDatabaseAction";
 export const useTaskStore = defineStore("TaskStore", {
   state: (): ITaskStore => ({
     todos: [],
   }),
+
   getters: {
     upcomingTasks(): ITodo[] {
       const today = new Date();
-      const dates = this.todos.map(({ deadline }): number =>
+      const deadlines = this.todos.map(({ deadline }) =>
         getTime(<Date>deadline),
       );
-      const closestDate = closestTo(today, dates);
+      const closestDate = closestTo(today, deadlines);
+
       if (!closestDate) return [];
+
       return this.todos.filter(
-        ({ deadline }): boolean =>
-          deadline === format(closestDate, "MM-dd-yyyy"),
+        ({ deadline }) =>
+          format(<Date>deadline, "MM-dd-yyyy") ===
+          format(closestDate, "MM-dd-yyyy"),
       );
     },
   },
-  actions: {
-    addTask: async function (task: ITodo) {
-      try {
-        const { error } = await supabase.from("tasks").insert([task]);
 
+  actions: {
+    async addTask(task: ITodo) {
+      await handleDatabaseAction(async () => {
+        const { error } = await supabase.from("tasks").insert([task]);
         if (error) throw error;
-      } catch (error) {
-        console.error(error);
-      }
+      }, "home.task.notification.created");
     },
 
-    editTask: async function (task: {
-      id: string;
-      title: string;
-      description: string;
-    }) {
-      try {
+    async editTask(task: { id: string; title: string; description: string }) {
+      await handleDatabaseAction(async () => {
         const { error } = await supabase
           .from("tasks")
           .update({ title: task.title, description: task.description })
           .eq("id", task.id);
 
         if (error) throw error;
-      } catch (err) {
-        console.error(err);
-      }
+      }, "home.task.notification.edited");
     },
 
-    removeTask: async function (id: string): Promise<void> {
-      try {
+    async removeTask(id: string) {
+      await handleDatabaseAction(async () => {
         const { error } = await supabase.from("tasks").delete().eq("id", id);
-
-        if (error) {
-          throw new Error(`Error removing task: ${error.message}`);
-        }
-      } catch (e) {
-        console.error("Error during task removal:", e);
-      }
+        if (error) throw error;
+      }, "home.task.notification.deleted");
     },
-    getTask: async function () {
+
+    async getTask() {
+      const toast = useToastStore();
       try {
         const { data: tasks, error } = await supabase.from("tasks").select("*");
 
         if (error) throw error;
         this.todos = tasks;
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        await toast.show({
+          message: error.message,
+          color: "red",
+        });
       }
     },
   },
