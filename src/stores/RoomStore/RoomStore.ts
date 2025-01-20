@@ -6,7 +6,7 @@ import {
   TRoomPayload,
 } from "@/stores/RoomStore/model/IRooms";
 import { IDuty } from "@/stores/RoomStore/model/IDuty";
-import { useToastStore } from "@/stores/components/ToastStore/ToastStore";
+import handleDatabaseAction from "@/utils/handleDatabaseAction";
 
 export const useRoomStore = defineStore("RoomStore", {
   state: (): {
@@ -14,8 +14,9 @@ export const useRoomStore = defineStore("RoomStore", {
   } => ({
     rooms: [],
   }),
+
   actions: {
-    getRooms: async function () {
+    async getRooms() {
       const { data } = await supabase
         .from("rooms")
         .select(
@@ -23,78 +24,72 @@ export const useRoomStore = defineStore("RoomStore", {
         );
       this.rooms = <IRooms[]>data;
     },
-    addRoom: async function (payload: TRoomPayload) {
-      const { data, error } = await supabase
-        .from("rooms")
-        .insert([payload])
-        .select();
+
+    async addRoom(payload: TRoomPayload) {
+      await handleDatabaseAction(async () => {
+        const { error } = await supabase.from("rooms").insert([payload]);
+        if (error) throw error;
+      }, "home.room.notification.created");
     },
-    editRoom: async function (payload: TEditRoomPayload) {
-      const { data, error } = await supabase
-        .from("rooms")
-        .update({ user_id: payload.user_id, name: payload.name })
-        .eq("room_id", payload.room_id)
-        .select();
+
+    async editRoom(payload: TEditRoomPayload) {
+      await handleDatabaseAction(async () => {
+        const { error } = await supabase
+          .from("rooms")
+          .update({ user_id: payload.user_id, name: payload.name })
+          .eq("room_id", payload.room_id);
+        if (error) throw error;
+      }, "home.room.notification.edited");
     },
-    removeRoom: async function (room_id: string) {
-      const { error } = await supabase
-        .from("rooms")
-        .delete()
-        .eq("room_id", room_id);
+
+    async removeRoom(room_id: string) {
+      await handleDatabaseAction(async () => {
+        const { error } = await supabase
+          .from("rooms")
+          .delete()
+          .eq("room_id", room_id);
+        if (error) throw error;
+      }, "home.room.notification.deleted");
     },
-    rotateUsers: async function () {
-      const toast = useToastStore();
-      try {
+
+    async rotateUsers() {
+      await handleDatabaseAction(async () => {
         const { error } = await supabase.rpc("rotate_user_assignments");
         if (error) throw error;
-      } catch (error) {
-        await toast.show({
-          color: "red",
-          message: error.message,
-        });
-      }
+      }, "home.room.notification.usersRotated");
     },
 
-    addDutyToRoom: async function (payload: IDuty) {
-      try {
-        const { error } = await supabase
-          .from("duties")
-          .insert([
-            {
-              title: payload.title,
-              description: payload.description,
-              room_id: payload.room_id,
-            },
-          ])
-          .select();
-
-        console.log(error);
-      } catch (err) {
-        console.error(err);
-      }
+    async addDutyToRoom(payload: IDuty) {
+      await handleDatabaseAction(async () => {
+        const { error } = await supabase.from("duties").insert([
+          {
+            title: payload.title,
+            description: payload.description,
+            room_id: payload.room_id,
+          },
+        ]);
+        if (error) throw error;
+      }, "home.duty.notification.created");
     },
-    editDuty: async function (payload: IDuty) {
-      try {
+
+    async editDuty(payload: IDuty) {
+      await handleDatabaseAction(async () => {
         const { error } = await supabase
           .from("duties")
           .update({
             title: payload.title,
             description: payload.description,
           })
-          .eq("id", payload.id)
-          .select();
-        console.log(error);
-      } catch (err) {
-        console.error(err);
-      }
+          .eq("id", payload.id);
+        if (error) throw error;
+      }, "home.duty.notification.edited");
     },
-    removeDuty: async function (id: string) {
-      try {
+
+    async removeDuty(id: string) {
+      await handleDatabaseAction(async () => {
         const { error } = await supabase.from("duties").delete().eq("id", id);
-        console.log(error);
-      } catch (err) {
-        console.error(err);
-      }
+        if (error) throw error;
+      }, "home.duty.notification.deleted");
     },
   },
 });

@@ -4,7 +4,7 @@ import { ITodo } from "@/models/ITodo";
 import { getTime, closestTo, format } from "date-fns";
 import { supabase } from "@/plugins/supabase";
 import { useToastStore } from "@/stores/components/ToastStore/ToastStore";
-
+import handleDatabaseAction from "@/utils/handleDatabaseAction";
 export const useTaskStore = defineStore("TaskStore", {
   state: (): ITaskStore => ({
     todos: [],
@@ -30,14 +30,14 @@ export const useTaskStore = defineStore("TaskStore", {
 
   actions: {
     async addTask(task: ITodo) {
-      await this.handleDatabaseAction(async () => {
+      await handleDatabaseAction(async () => {
         const { error } = await supabase.from("tasks").insert([task]);
         if (error) throw error;
       }, "home.task.notification.created");
     },
 
     async editTask(task: { id: string; title: string; description: string }) {
-      await this.handleDatabaseAction(async () => {
+      await handleDatabaseAction(async () => {
         const { error } = await supabase
           .from("tasks")
           .update({ title: task.title, description: task.description })
@@ -48,7 +48,7 @@ export const useTaskStore = defineStore("TaskStore", {
     },
 
     async removeTask(id: string) {
-      await this.handleDatabaseAction(async () => {
+      await handleDatabaseAction(async () => {
         const { error } = await supabase.from("tasks").delete().eq("id", id);
         if (error) throw error;
       }, "home.task.notification.deleted");
@@ -61,25 +61,6 @@ export const useTaskStore = defineStore("TaskStore", {
 
         if (error) throw error;
         this.todos = tasks;
-      } catch (error) {
-        await toast.show({
-          message: error.message,
-          color: "red",
-        });
-      }
-    },
-
-    async handleDatabaseAction(
-      action: () => Promise<void>,
-      successMessage: string,
-    ) {
-      const toast = useToastStore();
-      try {
-        await action();
-        await toast.show({
-          message: successMessage,
-          color: "success",
-        });
       } catch (error) {
         await toast.show({
           message: error.message,
