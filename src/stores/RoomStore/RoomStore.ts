@@ -6,6 +6,7 @@ import {
   TRoomPayload,
 } from "@/stores/RoomStore/model/IRooms";
 import { IDuty } from "@/stores/RoomStore/model/IDuty";
+import { useToastStore } from "@/stores/components/ToastStore/ToastStore";
 
 export const useRoomStore = defineStore("RoomStore", {
   state: (): {
@@ -42,9 +43,16 @@ export const useRoomStore = defineStore("RoomStore", {
         .eq("room_id", room_id);
     },
     rotateUsers: async function () {
-      const { data, error } = await supabase.rpc("rotate_user_assignments");
-      if (error) console.error(error);
-      else console.log(data);
+      const toast = useToastStore();
+      try {
+        const { error } = await supabase.rpc("rotate_user_assignments");
+        if (error) throw error;
+      } catch (error) {
+        await toast.show({
+          color: "red",
+          message: error.message,
+        });
+      }
     },
 
     addDutyToRoom: async function (payload: IDuty) {

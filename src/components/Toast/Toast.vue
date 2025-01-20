@@ -1,10 +1,11 @@
 <template>
   <v-snackbar
+    location="top right"
     :timeout="state.timeout"
     v-model="state.showToast"
     :color="state.color"
   >
-    {{ state.message }}
+    {{ t(state.message) }}
 
     <template #actions>
       <v-btn variant="text" @click="state.showToast = false">
@@ -17,8 +18,13 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useToastStore } from "@/stores/components/ToastStore/ToastStore";
+import { storeToRefs } from "pinia";
+import { useI18n } from "vue-i18n";
 
-const { message, timeout, color, showToast } = useToastStore();
+const { t } = useI18n();
+const toastStore = useToastStore();
+
+const { message, timeout, color, showToast } = storeToRefs(toastStore);
 
 const state = reactive({
   message,

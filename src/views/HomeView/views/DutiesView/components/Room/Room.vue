@@ -162,6 +162,7 @@ const actionColor = computed(() => (props.editMode ? "warning" : "primary"));
     v-model="confirmDialog"
     :content="t('home.duty.confirmRemoveDuty.content')"
     :title="t('home.duty.confirmRemoveDuty.t')"
+    @close="confirmDialog = false"
     @confirm="removeDuty"
   />
 
@@ -169,6 +170,7 @@ const actionColor = computed(() => (props.editMode ? "warning" : "primary"));
     v-model="confirmRemoveRoomDialog"
     :content="t('home.duty.confirmRemoveRoom.content')"
     :title="t('home.duty.confirmRemoveRoom.t')"
+    @close="confirmRemoveRoomDialog = false"
     @confirm="removeRoom"
   />
 </template>

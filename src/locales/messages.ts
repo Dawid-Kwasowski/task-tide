@@ -6,6 +6,7 @@ const validationMessages = {
 
 const errors = {
   conflict: "Taki użytkownik już istnieje!",
+  codes: {},
 };
 
 const navigation = {
@@ -66,6 +67,11 @@ export const messages = {
         navigation,
       },
       task: {
+        notification: {
+          created: "Zadanie zostało utoworzone",
+          edited: "Zadanie zostało edytowane",
+          deleted: "Zadanie zostało usunięte",
+        },
         t: "Nowe zadanie",
         placeholder: "Tytuł zadania",
         todayList: "Lista zadań na dziś",
