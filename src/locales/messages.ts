@@ -29,7 +29,8 @@ export const messages = {
         management: "Zardządzaj profilami",
         editName: "Edytuj imię",
         deleteProfile: "Usuń użytkownika",
-        editAvatar: "Edytuj zdjęcie",
+        editAvatar: "Zmień zdjęcie",
+        addAvatar: "Dodaj zdjęcie",
       },
       signIn: {
         t: "Mam już konto!",

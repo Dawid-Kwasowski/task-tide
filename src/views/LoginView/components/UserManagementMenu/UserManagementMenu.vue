@@ -25,17 +25,24 @@
             ></v-text-field>
           </v-col>
         </v-row>
-        <v-row>
+        <v-row class="my-0">
           <v-col>
-            <v-btn @click="open">
-              {{ t("auth.editProfiles.editAvatar") }}
+            <v-btn block @click="open">
+              {{
+                props.avatar_url
+                  ? t("auth.editProfiles.editAvatar")
+                  : t("auth.editProfiles.addAvatar")
+              }}
             </v-btn>
           </v-col>
-          <v-col>
-            <v-btn @click="removeAvatar(user_id)" color="error">
-              <v-icon icon="mdi-image-remove"></v-icon>
-            </v-btn>
-          </v-col>
+
+          <template v-if="props.avatar_url">
+            <v-col>
+              <v-btn @click="removeAvatar(user_id)" color="error">
+                <v-icon icon="mdi-image-remove"></v-icon>
+              </v-btn>
+            </v-col>
+          </template>
         </v-row>
       </v-card-text>
 
@@ -51,7 +58,7 @@
 
 <script lang="ts" setup>
 import { useUserStore } from "@/stores/UserStore/UserStore";
-import IUserManagement from "./model/IUserManagamentMenu";
+import IUserManagement from "./model/IUserManagementMenu";
 import { useI18n } from "vue-i18n";
 import { useFileDialog } from "@vueuse/core";
 import { useField, useForm } from "vee-validate";
