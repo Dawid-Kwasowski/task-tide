@@ -77,8 +77,22 @@ const actionColor = computed(() => (props.editMode ? "warning" : "primary"));
           <h3>{{ room.name }}</h3>
         </div>
         <div class="d-flex justify-end ma-2">
-          <v-avatar v-for="key in room.profiles" :key="key">
-            <v-img :src="key" />
+          <v-avatar
+            size="42"
+            color="surface-variant"
+            class="pa-1 cursor-default"
+          >
+            <template v-if="room.profiles.avatar_url">
+              <v-img :src="room.profiles.avatar_url" />
+            </template>
+            <template v-else>
+              <span class="text-h5">
+                {{ room.profiles.username.charAt(0).toUpperCase() }}
+              </span>
+            </template>
+            <v-tooltip activator="parent" location="bottom">
+              {{ room.profiles.username }}
+            </v-tooltip>
           </v-avatar>
         </div>
       </v-card-title>

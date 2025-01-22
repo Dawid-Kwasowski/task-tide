@@ -41,13 +41,13 @@
               <v-icon class="text-white" icon="mdi-pencil"></v-icon>
             </div>
 
-            <UserManagamentMenu
+            <UserManagementMenu
               :index="user_id"
               :user_id="user_id"
               :username="username"
               :avatar_url="avatar_url"
             >
-            </UserManagamentMenu>
+            </UserManagementMenu>
 
             <div
               class="position-absolute bg-black opacity-70 h-100 w-100"
@@ -91,7 +91,7 @@
 import { useUserStore } from "@/stores/UserStore/UserStore";
 import { onBeforeMount, ref } from "vue";
 import { storeToRefs } from "pinia";
-import UserManagamentMenu from "../UserManagamentMenu/UserManagamentMenu.vue";
+import UserManagementMenu from "@/views/LoginView/components/UserManagementMenu/UserManagementMenu.vue";
 import { IUserInfo } from "@/stores/UserStore/models/UserInfo";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";

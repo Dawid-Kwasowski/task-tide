@@ -19,9 +19,7 @@ const editMode = ref(false);
 
 const editButtonVariant = computed(() => (editMode.value ? "flat" : "text"));
 
-const atLeastOneRoom = computed(() => roomsStore.rooms.length > 0);
-
-const draggable = computed(() => editMode.value);
+const atLeastRoom = (count: number) => roomsStore.rooms.length > count - 1;
 </script>
 
 <template>
@@ -30,7 +28,7 @@ const draggable = computed(() => editMode.value);
       <v-col>
         <h1>{{ t("home.duty.t") }}</h1>
       </v-col>
-      <template v-if="atLeastOneRoom">
+      <template v-if="atLeastRoom(1)">
         <v-col class="d-flex justify-end ga-2" align-self="center">
           <v-btn
             @click="editMode = !editMode"
@@ -42,16 +40,18 @@ const draggable = computed(() => editMode.value);
               editMode ? t("home.duty.editModeOff") : t("home.duty.editModeOn")
             }}
           </v-btn>
-          <v-btn prepend-icon="mdi-restore" @click="makeRotation">{{
-            t("home.duty.rotation")
-          }}</v-btn>
+          <template v-if="atLeastRoom(2)">
+            <v-btn prepend-icon="mdi-restore" @click="makeRotation">
+              {{ t("home.duty.rotation") }}
+            </v-btn>
+          </template>
         </v-col>
       </template>
     </v-row>
     <v-row>
-      <template v-if="atLeastOneRoom">
+      <template v-if="atLeastRoom(1)">
         <v-col v-for="(value, key) in roomsStore.rooms" :key>
-          <room :draggable :edit-mode="editMode" :room="value" :name="key" />
+          <room :edit-mode="editMode" :room="value" :name="key" />
         </v-col>
       </template>
       <template v-else>
