@@ -1,6 +1,7 @@
 // Composables
 import { supabase } from "@/plugins/supabase";
 import { createRouter, createWebHistory } from "vue-router";
+import { IUserInfo } from "@/stores/UserStore/models/UserInfo";
 const routes = [
   {
     path: "",
@@ -51,14 +52,31 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(async (to, from): Promise<{ name: string } | undefined> => {
-  if (from.name !== "Auth") {
+router.beforeEach(async (to, from) => {
+  try {
+    // Redirect unauthenticated users to Auth
     const {
       data: { user },
     } = await supabase.auth.getUser();
+
     if (to.name !== "Auth" && user?.aud !== "authenticated") {
       return { name: "Auth" };
     }
+
+    const userInfo = localStorage.getItem("pinia/user/user-info");
+    const parsedUserInfo: IUserInfo | null = userInfo
+      ? JSON.parse(userInfo)
+      : null;
+
+    if (
+      !["Browse", "Auth"].includes(to.name as string) &&
+      !["Browse", "Auth"].includes(from.name as string) &&
+      !parsedUserInfo?.user_id
+    ) {
+      return { name: "Browse" };
+    }
+  } catch (error) {
+    console.error("Router guard error:", error);
   }
 });
 

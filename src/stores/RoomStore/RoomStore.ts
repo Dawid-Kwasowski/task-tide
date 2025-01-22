@@ -35,8 +35,12 @@ export const useRoomStore = defineStore("RoomStore", {
     },
 
     async addRoom(payload: TRoomPayload) {
+      const owner = await supabase.auth.getUser();
+      const _payload = Object.assign(payload, {
+        owner_id: owner.data.user?.id,
+      });
       await handleDatabaseAction(async () => {
-        const { error } = await supabase.from("rooms").insert([payload]);
+        const { error } = await supabase.from("rooms").insert([_payload]);
         if (error) throw error;
       }, "home.room.notification.created");
     },
@@ -69,12 +73,14 @@ export const useRoomStore = defineStore("RoomStore", {
     },
 
     async addDutyToRoom(payload: IDuty) {
+      const owner = await supabase.auth.getUser();
       await handleDatabaseAction(async () => {
         const { error } = await supabase.from("duties").insert([
           {
             title: payload.title,
             description: payload.description,
             room_id: payload.room_id,
+            owner_id: owner.data.user?.id,
           },
         ]);
         if (error) throw error;

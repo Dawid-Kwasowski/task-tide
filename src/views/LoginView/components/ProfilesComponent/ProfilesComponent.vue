@@ -69,9 +69,20 @@
 
   <v-row v-if="userList.length > 0" justify="center">
     <v-col cols="auto">
-      <v-btn @click="toggleEditMode" prepend-icon="mdi-pencil">{{
-        t("auth.editProfiles.management")
-      }}</v-btn>
+      <v-btn @click="toggleEditMode" prepend-icon="mdi-pencil">
+        {{
+          editMode
+            ? t("auth.editProfiles.done")
+            : t("auth.editProfiles.management")
+        }}</v-btn
+      >
+    </v-col>
+  </v-row>
+  <v-row justify="center">
+    <v-col cols="auto">
+      <v-btn @click="signOutOwner" variant="text" color="red">
+        {{ t("accounts.logout") }}
+      </v-btn>
     </v-col>
   </v-row>
 </template>
@@ -99,12 +110,17 @@ const toggleEditMode = (): void => {
 
 const selectProfile = async (profile: IUserInfo): Promise<void> => {
   if (editMode.value) return;
-  await store.saveUserInfo(profile);
-  router.push({ path: "/" });
+  store.saveUserInfo(profile);
+  await router.push({ path: "/" });
+};
+
+const signOutOwner = async () => {
+  await store.signOut();
+  await router.push({ path: "/auth" });
 };
 
 onBeforeMount(async (): Promise<void> => {
-  await store.getProfiles();
+  await store.fetchProfiles();
 });
 
 const emit = defineEmits(["createProfile"]);

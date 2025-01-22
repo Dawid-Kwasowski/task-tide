@@ -6,7 +6,7 @@ const validationMessages = {
 
 const errors = {
   conflict: "Taki użytkownik już istnieje!",
-  codes: {},
+  invalidCredential: "Nieprawidłowy login lub hasło!",
 };
 
 const navigation = {
@@ -25,16 +25,17 @@ export const messages = {
       signInTab: "Zaloguj się",
       signUpTab: "Stwórz konto",
       editProfiles: {
+        done: "Zrobione",
         management: "Zardządzaj profilami",
         editName: "Edytuj imię",
         deleteProfile: "Usuń użytkownika",
         editAvatar: "Edytuj zdjęcie",
       },
       signIn: {
-        t: "Witamy ponownie",
+        t: "Mam już konto!",
       },
       signUp: {
-        t: "Dołącz do nas",
+        t: "Jestem tu nowy!",
       },
       email: "Wpisz email",
       password: "Wpisz hasło",
@@ -48,6 +49,7 @@ export const messages = {
     accounts: {
       createProfile: "Stwórz konto",
       chooseProfile: "Wybierz profil",
+      logout: "Wyloguj się",
       newProfile: {
         t: "Dodaj profil",
         subtitle: "Dodaj kolejny profil osoby korzystjącej z serwisu Vtime",

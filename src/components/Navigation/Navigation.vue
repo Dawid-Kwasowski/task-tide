@@ -16,7 +16,4 @@
 import { useUserStore } from "@/stores/UserStore/UserStore";
 
 const { user } = useUserStore();
-// const items: any[] = [
-//    {title: ''}
-// ]
 </script>

@@ -67,8 +67,8 @@ const { user } = storeToRefs(userStore);
 const drawer = ref(false);
 
 const logoutProfile = async () => {
-  await userStore.removeUserInfo();
   await route.push({ path: "/browse" });
+  userStore.clearUserInfo();
 };
 
 const items = route
@@ -83,7 +83,7 @@ const items = route
 onMounted(async () => {
   await todosStore.getTask();
   await roomsStore.getRooms();
-  await userStore.getProfiles();
+  await userStore.fetchProfiles();
   supabase
     .channel("tasks-all-channel")
     .on(

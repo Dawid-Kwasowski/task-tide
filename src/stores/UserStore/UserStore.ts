@@ -7,6 +7,8 @@ import IUserState, {
 import { supabase } from "@/plugins/supabase";
 import { v4 as uuidv4 } from "uuid";
 import { useLocalStorage } from "@vueuse/core";
+import handleDatabaseAction from "@/utils/handleDatabaseAction";
+
 export const useUserStore = defineStore("UserStore", {
   state: (): IUserState => ({
     userList: [] as IUserInfo[],
@@ -15,139 +17,121 @@ export const useUserStore = defineStore("UserStore", {
     }),
   }),
   actions: {
-    async getProfiles(): Promise<void> {
-      try {
+    async fetchProfiles(): Promise<void> {
+      await handleDatabaseAction(async () => {
         const { data, error, status } = await supabase
           .from("profiles")
-          .select(`user_id, username, avatar_url`);
+          .select("user_id, username, avatar_url");
+
         if (error && status !== 406) throw error;
-        if (data) {
-          this.userList = <any>data;
-        }
-      } catch (err) {
-        console.log(err);
-      }
+        if (data) this.userList = data as IUserInfo[];
+      });
     },
 
-    async addNewUser(user: TNewUserInfo): Promise<any> {
-      try {
-        if (
-          this.userList.some(
-            (userInList: IUserInfo): boolean =>
-              user.username === userInList.username,
-          )
-        ) {
-          throw new Error("Error: 409");
+    async addUser(newUser: TNewUserInfo): Promise<void> {
+      const owner = await supabase.auth.getUser();
+      await handleDatabaseAction(async () => {
+        if (this.userList.some((user) => user.username === newUser.username)) {
+          throw new Error("Username already exists.");
         }
 
         const { error } = await supabase.from("profiles").insert({
           user_id: uuidv4(),
-          updated_at: new Date(),
-          username: user.username,
-          avatar_url: user.avatar_url,
+          updated_at: new Date().toISOString(),
+          username: newUser.username,
+          avatar_url: newUser.avatar_url,
+          owner_id: owner.data.user.id,
         });
 
         if (error) throw error;
 
-        return user;
-      } catch (e: any) {
-        Promise.reject(e.message);
-      }
+        await this.fetchProfiles();
+      }, "User added successfully");
     },
-    async removeUser(user_id: string): Promise<any> {
-      try {
+
+    async deleteUser(userId: string): Promise<void> {
+      await handleDatabaseAction(async () => {
         const { error } = await supabase
           .from("profiles")
           .delete()
-          .eq("user_id", user_id);
+          .eq("user_id", userId);
 
         if (error) throw error;
-        await this.getProfiles();
-      } catch (e: any) {
-        Promise.reject(e.message);
-      }
+
+        await this.fetchProfiles();
+      }, "User deleted successfully");
     },
 
-    async editUsername(user_id: string, username: string): Promise<any> {
-      try {
+    async updateUsername(userId: string, username: string): Promise<void> {
+      await handleDatabaseAction(async () => {
         const { error } = await supabase
           .from("profiles")
           .update({ username })
-          .eq("user_id", user_id);
+          .eq("user_id", userId);
 
         if (error) throw error;
-        await this.getProfiles();
-      } catch (e: any) {
-        Promise.reject(e.message);
-      }
+
+        await this.fetchProfiles();
+      }, "Username updated successfully");
     },
 
-    async editAvatar(user_id: string, avatar_url: any): Promise<any> {
-      try {
-        console.log("edit avatar", avatar_url);
-        const { error } = await supabase
-          .from("profiles")
-          .update({ avatar_url })
-          .eq("user_id", user_id);
-        if (error) throw error;
-        await this.getProfiles();
-      } catch (e: any) {
-        Promise.reject(e.message);
-      }
+    async updateAvatar(
+      userId: string,
+      avatarUrl: string | null,
+    ): Promise<void> {
+      await handleDatabaseAction(
+        async () => {
+          const { error } = await supabase
+            .from("profiles")
+            .update({ avatar_url: avatarUrl })
+            .eq("user_id", userId);
+
+          if (error) throw error;
+
+          await this.fetchProfiles();
+        },
+        avatarUrl
+          ? "Avatar updated successfully"
+          : "Avatar deleted successfully",
+      );
     },
 
-    async removeAvatar(user_id: string): Promise<any> {
-      try {
-        const { error } = await supabase
-          .from("profiles")
-          .update({ avatar_url: null })
-          .eq("user_id", user_id);
-        if (error) throw error;
-        await this.getProfiles();
-      } catch (e: any) {
-        Promise.reject(e.message);
-      }
-    },
-
-    async saveUserInfo(user: IUserInfo): Promise<any> {
+    saveUserInfo(user: IUserInfo): void {
       this.user = user;
     },
 
-    async removeUserInfo(): Promise<any> {
-      localStorage.removeItem("");
+    clearUserInfo(): void {
+      this.user = {} as IUserInfo;
     },
 
-    async singUpOwner(owner: IOwnerInfo): Promise<void> {
-      try {
+    async signOut(): Promise<void> {
+      await handleDatabaseAction(async () => {
+        const { error } = await supabase.auth.signOut();
+
+        if (error) throw error;
+
+        this.clearUserInfo();
+      }, "Signed out successfully");
+    },
+
+    async signUp(owner: IOwnerInfo): Promise<void> {
+      await handleDatabaseAction(async () => {
         const { error } = await supabase.auth.signUp(owner);
-        if (error) {
-          console.log("error", error);
-        }
-      } catch (e) {
-        console.log(e);
-      }
+
+        if (error) throw error;
+      }, "Signed up successfully");
     },
 
-    async signInOwner(owner: IOwnerInfo): Promise<any> {
-      try {
+    async signIn(owner: IOwnerInfo): Promise<string | undefined> {
+      return await handleDatabaseAction<any>(async () => {
         const { error } = await supabase.auth.signInWithPassword(owner);
 
-        if (error) {
-          throw error;
-        }
+        if (error) throw "app.errors.invalidCredential";
 
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
+        const { data } = await supabase.auth.getUser();
 
-        return user?.aud;
-      } catch (e) {
-        console.log(e);
-      }
-    },
-
-    async signOutOwner(): Promise<void> {
-      await supabase.auth.signOut();
+        return data?.user?.aud;
+      }, "Signed in successfully");
     },
   },
 });

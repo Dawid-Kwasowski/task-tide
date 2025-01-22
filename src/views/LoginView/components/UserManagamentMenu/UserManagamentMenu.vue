@@ -73,7 +73,7 @@ onChange((files: any): void => {
   const reader = new FileReader();
 
   reader.onload = (evt) => {
-    store.editAvatar(props.user_id, evt.target?.result);
+    store.updateAvatar(props.user_id, evt.target?.result);
   };
 
   if (file) {
@@ -91,16 +91,16 @@ const { handleSubmit } = useForm({
 });
 
 const removeAvatar = (user_id: string): void => {
-  store.removeAvatar(user_id);
+  store.updateAvatar(user_id, null);
 };
 
 const deleteUser = (): void => {
-  store.removeUser(`${props.user_id}`);
+  store.deleteUser(`${props.user_id}`);
 };
 
 const username = useField("username");
 
 const editName = handleSubmit((values): void => {
-  store.editUsername(props.user_id, values.username);
+  store.updateUsername(props.user_id, values.username);
 });
 </script>

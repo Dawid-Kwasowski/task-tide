@@ -1,6 +1,5 @@
 <template>
   <v-snackbar
-    location="top right"
     :timeout="state.timeout"
     v-model="state.showToast"
     :color="state.color"

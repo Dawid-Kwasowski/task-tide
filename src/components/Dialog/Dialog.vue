@@ -8,7 +8,7 @@ const dialog = defineModel<boolean>();
     v-model="dialog"
     transition="dialog-bottom-transition"
   >
-    <v-card>
+    <v-card elevation="0">
       <v-card-title class="text-center">
         <slot name="header"></slot>
       </v-card-title>

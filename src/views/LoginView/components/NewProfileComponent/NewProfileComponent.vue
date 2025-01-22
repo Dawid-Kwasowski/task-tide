@@ -5,12 +5,12 @@
         <v-row>
           <v-col cols="12">
             <v-card-title class="text-h3">{{
-              $t("accounts.newProfile.t")
+              t("accounts.newProfile.t")
             }}</v-card-title>
           </v-col>
           <v-col cols="12">
             <v-card-subtitle class="text-wrap">{{
-              $t("accounts.newProfile.subtitle")
+              t("accounts.newProfile.subtitle")
             }}</v-card-subtitle>
           </v-col>
           <v-col cols="12">
@@ -70,7 +70,7 @@
                 counter
                 v-model="name.value.value"
                 :error-messages="name.errorMessage.value"
-                :label="$t('accounts.newProfile.username')"
+                :label="t('accounts.newProfile.username')"
                 variant="underlined"
               ></v-text-field>
             </v-form>
@@ -84,10 +84,10 @@
             <v-btn
               @click="addNewProfile"
               :disabled="!isNameDirty || !isNameValid"
-              >{{ $t("accounts.newProfile.next") }}</v-btn
+              >{{ t("accounts.newProfile.next") }}</v-btn
             >
             <v-btn @click="cancel" variant="text">{{
-              $t("accounts.newProfile.cancel")
+              t("accounts.newProfile.cancel")
             }}</v-btn>
           </v-col>
         </v-row>
@@ -110,13 +110,9 @@ import {
   useIsFieldValid,
 } from "vee-validate";
 import { useUserStore } from "@/stores/UserStore/UserStore";
-import { useRouter } from "vue-router";
-import { useToastStore } from "@/stores/components/ToastStore/ToastStore";
 
 const { t } = useI18n();
-const { addNewUser, saveUserInfo } = useUserStore();
-const { show } = useToastStore();
-const router = useRouter();
+const { addUser, saveUserInfo } = useUserStore();
 
 const { handleSubmit, handleReset } = useForm({
   validationSchema: {
@@ -152,7 +148,6 @@ const selectFile = (input: any): void => {
   reader.onload = (e): void => {
     if (!e.target?.result) return;
     selectedImage.value = e.target?.result;
-    console.log(selectedImage.value);
     if (menu.value) menu.value = false;
   };
 
@@ -166,9 +161,10 @@ const deleteAvatar = (): void => {
   menu.value = false;
 };
 
-const submit = handleSubmit((values: any): void => {
+const submit = handleSubmit(async (values: any): void => {
   Object.assign(values, { avatar: selectedImage.value });
-  addNewUser(values);
+  await addUser(values);
+  emit("cancel");
 });
 
 const cancel = (): void => {
@@ -178,25 +174,11 @@ const cancel = (): void => {
 };
 
 const addNewProfile = async (): Promise<void> => {
-  try {
-    const result = await addNewUser({
-      avatar_url: selectedImage.value,
-      username: name.value.value,
-    });
-
-    if (result) {
-      await saveUserInfo(result);
-      router.push({ path: "/" });
-    }
-  } catch (err: any) {
-    console.error(err.message);
-
-    await show({
-      color: "danger",
-      message: err.message,
-      timeout: 3000,
-    });
-  }
+  await addUser({
+    avatar_url: selectedImage.value,
+    username: name.value.value,
+  });
+  emit("cancel");
 };
 const menuItems: IMenuItem[] = [
   {
