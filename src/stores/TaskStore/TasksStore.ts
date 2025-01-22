@@ -31,7 +31,9 @@ export const useTaskStore = defineStore("TaskStore", {
   actions: {
     async addTask(task: ITodo) {
       await handleDatabaseAction(async () => {
-        const { error } = await supabase.from("tasks").insert([task]);
+        const owner = await supabase.auth.getUser();
+        const payload = Object.assign(task, { owner_id: owner.data.user?.id });
+        const { error } = await supabase.from("tasks").insert([payload]);
         if (error) throw error;
       }, "home.task.notification.created");
     },
