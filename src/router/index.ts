@@ -1,4 +1,3 @@
-// Composables
 import { supabase } from "@/plugins/supabase";
 import { createRouter, createWebHistory } from "vue-router";
 import { IUserInfo } from "@/stores/UserStore/models/UserInfo";
@@ -30,6 +29,11 @@ const routes = [
     ],
     component: () =>
       import(/* webpackChunkName: "home" */ "@/views/HomeView/Home.vue"),
+  },
+  {
+    path: "/recovery-password",
+    name: "RecoveryPassword",
+    component: () => import("@/views/RecoveryPasswordView/RecoveryPasswordView.vue")
   },
   {
     path: "/auth",
