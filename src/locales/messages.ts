@@ -34,6 +34,7 @@ export const messages = {
       },
       signIn: {
         t: "Mam już konto!",
+        resetPassword: "Zapomniałeś hasła?",
       },
       signUp: {
         t: "Jestem tu nowy!",
