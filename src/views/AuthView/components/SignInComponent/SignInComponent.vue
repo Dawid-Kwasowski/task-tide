@@ -7,7 +7,7 @@
     <form-template-component @submit="signInOwner"></form-template-component>
 
     <v-card-actions class="justify-center">
-      <v-btn>
+      <v-btn @click="router.push({ path: '/reset-password' })">
         {{ t("auth.signIn.resetPassword") }}
       </v-btn>
     </v-card-actions>
@@ -15,11 +15,11 @@
 </template>
 <script setup lang="ts">
 import FormTemplateComponent from "@/views/AuthView/components/FormTemplateComponent/FormTemplateComponent.vue";
-import { useUserStore } from "@/stores/UserStore/UserStore";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { useAuthUser } from "@/composables/UseAuthUser";
 
-const { signIn } = useUserStore();
+const { signIn } = useAuthUser();
 const router = useRouter();
 const { t } = useI18n();
 

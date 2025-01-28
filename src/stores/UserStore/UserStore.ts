@@ -103,35 +103,5 @@ export const useUserStore = defineStore("UserStore", {
     clearUserInfo(): void {
       this.user = {} as IUserInfo;
     },
-
-    async signOut(): Promise<void> {
-      await handleDatabaseAction(async () => {
-        const { error } = await supabase.auth.signOut();
-
-        if (error) throw error;
-
-        this.clearUserInfo();
-      }, "Signed out successfully");
-    },
-
-    async signUp(owner: IOwnerInfo): Promise<void> {
-      await handleDatabaseAction(async () => {
-        const { error } = await supabase.auth.signUp(owner);
-
-        if (error) throw error;
-      }, "Signed up successfully");
-    },
-
-    async signIn(owner: IOwnerInfo): Promise<string | undefined> {
-      return await handleDatabaseAction<any>(async () => {
-        const { error } = await supabase.auth.signInWithPassword(owner);
-
-        if (error) throw "app.errors.invalidCredential";
-
-        const { data } = await supabase.auth.getUser();
-
-        return data?.user?.aud;
-      }, "Signed in successfully");
-    },
   },
 });

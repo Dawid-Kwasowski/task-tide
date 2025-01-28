@@ -112,7 +112,7 @@ import {
 import { useUserStore } from "@/stores/UserStore/UserStore";
 
 const { t } = useI18n();
-const { addUser, saveUserInfo } = useUserStore();
+const { addUser } = useUserStore();
 
 const { handleSubmit, handleReset } = useForm({
   validationSchema: {

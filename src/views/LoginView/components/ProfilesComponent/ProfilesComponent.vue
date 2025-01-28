@@ -2,7 +2,11 @@
   <v-row>
     <v-col>
       <h1 class="text-center text-h2 my-5">
-        {{ t("accounts.chooseProfile") }}
+        {{
+          userList.length > 0
+            ? t("accounts.chooseProfile")
+            : t("accounts.emptyList")
+        }}
       </h1>
     </v-col>
   </v-row>
@@ -95,7 +99,10 @@ import UserManagementMenu from "@/views/LoginView/components/UserManagementMenu/
 import { IUserInfo } from "@/stores/UserStore/models/UserInfo";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { useAuthUser } from "@/composables/UseAuthUser";
 const store = useUserStore();
+
+const { signOut } = useAuthUser();
 
 const { userList } = storeToRefs(store);
 
@@ -115,8 +122,9 @@ const selectProfile = async (profile: IUserInfo): Promise<void> => {
 };
 
 const signOutOwner = async () => {
-  await store.signOut();
+  await signOut();
   await router.push({ path: "/auth" });
+  store.clearUserInfo();
 };
 
 onBeforeMount(async (): Promise<void> => {

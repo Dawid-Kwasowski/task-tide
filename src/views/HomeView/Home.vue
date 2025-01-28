@@ -14,7 +14,7 @@
             </template>
             <template v-else>
               <span class="text-h5">
-                {{ user.username.charAt(0).toUpperCase() }}
+                {{ user.username?.charAt(0).toUpperCase() }}
               </span>
             </template>
           </v-avatar>

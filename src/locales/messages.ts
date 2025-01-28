@@ -1,12 +1,15 @@
 const validationMessages = {
   required: "Pole jest wymagane!",
+  minLength: "Minimalna liczba znaków: {count}",
   maxLength: "Maksymalna liczba znaków: {count}",
   invalidEmail: "Nieprawidłowy email",
+  passwordMustMach: "Podane hasła się różnią",
 };
 
 const errors = {
   conflict: "Taki użytkownik już istnieje!",
   invalidCredential: "Nieprawidłowy login lub hasło!",
+  smthGoesWrong: "Coś poszło nie tak",
 };
 
 const navigation = {
@@ -42,6 +45,33 @@ export const messages = {
       email: "Wpisz email",
       password: "Wpisz hasło",
     },
+
+    updatePassword: {
+      t: "Aktualizacja hasła",
+      description: "Wpisz swoje nowe hasło 🤫",
+      fields: {
+        password: "Wprowadź hasło",
+        confirmPassword: "Potwierdź hasło",
+      },
+      update: "Zaaktualizuj",
+      notification: {
+        updated: "Hasło zostało zaktualizowane",
+      },
+    },
+    resetPassword: {
+      t: "Reset Hasła",
+      description:
+        "Przed wysłaniem upewnij się, że email, jest przypięty do konta",
+      fields: {
+        email: "Wprowadź swój email",
+      },
+      send: "Wyślij",
+      back: "Powrót",
+      notification: {
+        checkEmail: "Sprawdź podanego przez ciebie maila",
+      },
+    },
+
     components: {
       confirmDialog: {
         delete: "Usuń",
@@ -49,8 +79,9 @@ export const messages = {
       },
     },
     accounts: {
-      createProfile: "Stwórz konto",
+      createProfile: "Stwórz profil",
       chooseProfile: "Wybierz profil",
+      emptyList: "Stwórz nowy profil",
       logout: "Wyloguj się",
       newProfile: {
         t: "Dodaj profil",
