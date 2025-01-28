@@ -10,11 +10,11 @@
 
 <script setup lang="ts">
 import FormTemplateComponent from "@/views/AuthView/components/FormTemplateComponent/FormTemplateComponent.vue";
-import { useUserStore } from "@/stores/UserStore/UserStore";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { useAuthUser } from "@/composables/UseAuthUser";
 
-const { signUp, signIn } = useUserStore();
+const { signUp, signIn } = useAuthUser();
 const router = useRouter();
 const createAccount = async (payload) => {
   await signUp(payload);

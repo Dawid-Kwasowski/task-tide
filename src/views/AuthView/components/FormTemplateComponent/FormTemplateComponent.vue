@@ -38,25 +38,19 @@ import {
   useIsFieldDirty,
   useIsFieldValid,
 } from "vee-validate";
-import { emailExpression } from "@/validators/email";
+import { object, string } from "yup";
 
 const { t } = useI18n();
 
 const emit = defineEmits(["submit"]);
 
 const { handleSubmit } = useForm({
-  validationSchema: {
-    email(value: string): string | true {
-      if (!value) return t("app.validationMessages.required");
-      if (!emailExpression.test(value))
-        return t("app.validationMessages.invalidEmail");
-      return true;
-    },
-    password(value: string): string | true {
-      if (!value) return t("app.validationMessages.required");
-      return true;
-    },
-  },
+  validationSchema: object({
+    email: string()
+      .email(t("app.validationMessages.invalidEmail"))
+      .required(t("app.validationMessages.required")),
+    password: string().required(t("app.validationMessages.required")),
+  }),
 });
 
 const email: any = useField("email");
