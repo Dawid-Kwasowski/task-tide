@@ -41,14 +41,26 @@ export const useAuthUser = () => {
     }, "resetPassword.notification.checkEmail");
   };
 
-  const updatePassword = async (new_password: string) => {
+  const updateUser = async (attr: any) => {
     return await handleDatabaseAction(async () => {
-      const { error } = await supabase.auth.updateUser({
-        password: new_password,
-      });
+      const { error } = await supabase.auth.updateUser(attr);
 
       if (error) throw "app.errors.smthGoesWrong";
     }, "updatePassword.notification.updated");
+  };
+
+  const getUser = async () => {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+  };
+
+  const deleteUser = async () => {
+    await handleDatabaseAction(async () => {
+      const id = JSON.parse(localStorage.getItem("auth_key") || "").user?.id;
+      const { error } = await supabase.auth.admin.deleteUser(id);
+    });
   };
 
   return {
@@ -56,6 +68,7 @@ export const useAuthUser = () => {
     signIn,
     signOut,
     passwordReset,
-    updatePassword,
+    updateUser,
+    getUser,
   };
 };

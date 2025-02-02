@@ -25,7 +25,6 @@ const { handleSubmit, errors, defineField } = useForm({
 const [email, emailAttrs] = defineField("email");
 
 const submit = handleSubmit(async (values) => {
-  console.log("values", values);
   await passwordReset(values.email as string);
 });
 </script>

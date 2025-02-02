@@ -4,8 +4,8 @@
       <h1 class="text-center text-h2 my-5">
         {{
           userList.length > 0
-            ? t("accounts.chooseProfile")
-            : t("accounts.emptyList")
+            ? t("profiles.chooseProfile")
+            : t("profiles.emptyList")
         }}
       </h1>
     </v-col>
@@ -22,7 +22,7 @@
           size="100"
           icon="$plus"
         ></v-btn>
-        <span class="text-center mt-5">{{ t("accounts.createProfile") }}</span>
+        <span class="text-center mt-5">{{ t("profiles.createProfile") }}</span>
       </div>
     </v-col>
     <template v-if="userList.length > 0">
@@ -85,7 +85,7 @@
   <v-row justify="center">
     <v-col cols="auto">
       <v-btn @click="signOutOwner" variant="text" color="red">
-        {{ t("accounts.logout") }}
+        {{ t("profiles.logout") }}
       </v-btn>
     </v-col>
   </v-row>

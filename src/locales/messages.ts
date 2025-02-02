@@ -46,6 +46,15 @@ export const messages = {
       password: "Wpisz hasło",
     },
 
+    account: {
+      t: "Konto użytkownika",
+      sections: {
+        email: {
+          field: "Wpisz email",
+        },
+      },
+    },
+
     updatePassword: {
       t: "Aktualizacja hasła",
       description: "Wpisz swoje nowe hasło 🤫",
@@ -78,7 +87,7 @@ export const messages = {
         cancel: "Anuluj",
       },
     },
-    accounts: {
+    profiles: {
       createProfile: "Stwórz profil",
       chooseProfile: "Wybierz profil",
       emptyList: "Stwórz nowy profil",
