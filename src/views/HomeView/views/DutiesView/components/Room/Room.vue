@@ -7,6 +7,7 @@ import DutyForm from "@/views/HomeView/views/DutiesView/components/Room/componen
 import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog.vue";
 import { useRoomStore } from "@/stores/RoomStore/RoomStore";
 import RoomForm from "@/views/HomeView/views/DutiesView/components/RoomForm/RoomForm.vue";
+import { IDuty } from "@/stores/RoomStore/model/IDuty";
 
 const props = defineProps<IRoomsProps>();
 
@@ -21,15 +22,15 @@ const confirmDialog = ref(false);
 const confirmRemoveRoomDialog = ref(false);
 
 // Selected duty state
-const selectedDuty = ref(undefined);
+const selectedDuty = ref<IDuty | undefined>(undefined);
 
 // Utility functions
 const openDialog = (dialogRef: any) => {
   dialogRef.value = true;
 };
 
-const assignDuty = (id: string) => {
-  return room.value.duties.find((duty: any) => duty.id === id);
+const assignDuty = (id: string): IDuty => {
+  return room.value.duties.find((duty: any) => duty.id === id) as IDuty;
 };
 
 const editDuty = (id: string) => {
@@ -43,7 +44,7 @@ const prepareDutyToDelete = (id: string) => {
 };
 
 const removeDuty = () => {
-  if (selectedDuty.value) {
+  if (selectedDuty.value?.id) {
     roomStore.removeDuty(selectedDuty.value.id);
   }
   confirmDialog.value = false;
@@ -51,6 +52,7 @@ const removeDuty = () => {
 
 const removeRoom = () => {
   roomStore.removeRoom(props.room.room_id);
+  confirmRemoveRoomDialog.value = false;
 };
 
 const makeAction = () => {
