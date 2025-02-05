@@ -4,13 +4,17 @@ import { IUserInfo } from "@/stores/UserStore/models/UserInfo";
 
 export const guards = (router: Router) => {
   const publicRoutes = ["Auth", "ResetPassword"];
-
+  const profileRoutesExceptions = [
+    "Browse",
+    "UpdatePassword",
+    "Account",
+    ...publicRoutes,
+  ];
   const authGuard = async (to: RouteLocationNormalizedGeneric) => {
     // Redirect unauthenticated users to Auth
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    console.log(to.name);
     if (
       !publicRoutes.includes(to.name as string) &&
       user?.aud !== "authenticated"
@@ -27,9 +31,7 @@ export const guards = (router: Router) => {
       : null;
 
     if (
-      !["Browse", "UpdatePassword", ...publicRoutes].includes(
-        to.name as string,
-      ) &&
+      !profileRoutesExceptions.includes(to.name as string) &&
       !parsedUserInfo?.user_id
     ) {
       return { name: "Browse" };
@@ -43,7 +45,6 @@ export const guards = (router: Router) => {
       if (authResult !== true) return authResult;
 
       const profileResult = await profileGuard(to);
-      console.log("profileResult", profileResult);
       if (profileResult !== true) return profileResult;
 
       return true;

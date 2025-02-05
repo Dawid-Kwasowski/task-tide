@@ -46,6 +46,25 @@ export const messages = {
       password: "Wpisz hasło",
     },
 
+    account: {
+      t: "Konto użytkownika",
+      sections: {
+        email: {
+          field: "Wpisz email",
+        },
+        password: {
+          notification: {
+            success: "Hasło zostało zaktualizowane",
+          },
+        },
+      },
+
+      confirmDialog: {
+        t: "Chcesz usunąć użytkownika?",
+        description: "Aby potwierdzić, wpisz:",
+      },
+    },
+
     updatePassword: {
       t: "Aktualizacja hasła",
       description: "Wpisz swoje nowe hasło 🤫",
@@ -55,7 +74,7 @@ export const messages = {
       },
       update: "Zaaktualizuj",
       notification: {
-        updated: "Hasło zostało zaktualizowane",
+        updated: "Hasło zostało zaktualizowane, sprawdź swoją skrzynkę",
       },
     },
     resetPassword: {
@@ -78,7 +97,7 @@ export const messages = {
         cancel: "Anuluj",
       },
     },
-    accounts: {
+    profiles: {
       createProfile: "Stwórz profil",
       chooseProfile: "Wybierz profil",
       emptyList: "Stwórz nowy profil",

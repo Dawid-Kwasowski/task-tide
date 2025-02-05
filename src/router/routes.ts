@@ -28,6 +28,11 @@ export default [
       import(/* webpackChunkName: "home" */ "@/views/HomeView/Home.vue"),
   },
   {
+    path: "/account",
+    name: "Account",
+    component: () => import("@/views/AccountView/AccountView.vue"),
+  },
+  {
     path: "/reset-password/:email?",
     name: "ResetPassword",
     component: () => import("@/views/ResetPasswordView/ResetPasswordView.vue"),

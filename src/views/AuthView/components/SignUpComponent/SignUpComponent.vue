@@ -1,5 +1,5 @@
 <template>
-  <v-card variant="tonal">
+  <v-card max-width="1000" variant="tonal">
     <v-card-title class="text-h4 text-center ma-2">
       {{ t("auth.signUp.t") }}
     </v-card-title>
@@ -17,10 +17,15 @@ import { useAuthUser } from "@/composables/UseAuthUser";
 const { signUp, signIn } = useAuthUser();
 const router = useRouter();
 const createAccount = async (payload) => {
-  await signUp(payload);
-  const isAuthenticated = await signIn(payload);
-  if (isAuthenticated === "authenticated") {
-    await router.push({ path: "/browse" });
+  try {
+    const error = await signUp(payload);
+    if (error) return;
+    const isAuthenticated = await signIn(payload);
+    if (isAuthenticated === "authenticated") {
+      await router.push({ path: "/browse" });
+    }
+  } catch {
+    console.log("error");
   }
 };
 const { t } = useI18n();

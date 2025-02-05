@@ -12,7 +12,7 @@ export default async function handleDatabaseAction<T>(
         message: successMessage,
         color: "success",
       });
-
+      console.log("response", response);
       return response;
     }
   } catch (error) {
@@ -20,5 +20,6 @@ export default async function handleDatabaseAction<T>(
       message: error?.message || error,
       color: "red",
     });
+    return error;
   }
 }

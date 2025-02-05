@@ -1,5 +1,5 @@
 export default interface IDialog {
   title: string;
-  content: string;
+  content?: string;
   width?: string | number;
 }

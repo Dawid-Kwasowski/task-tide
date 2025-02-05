@@ -5,12 +5,12 @@
         <v-row>
           <v-col cols="12">
             <v-card-title class="text-h3">{{
-              t("accounts.newProfile.t")
+              t("profiles.newProfile.t")
             }}</v-card-title>
           </v-col>
           <v-col cols="12">
             <v-card-subtitle class="text-wrap">{{
-              t("accounts.newProfile.subtitle")
+              t("profiles.newProfile.subtitle")
             }}</v-card-subtitle>
           </v-col>
           <v-col cols="12">
@@ -70,7 +70,7 @@
                 counter
                 v-model="name.value.value"
                 :error-messages="name.errorMessage.value"
-                :label="t('accounts.newProfile.username')"
+                :label="t('profiles.newProfile.username')"
                 variant="underlined"
               ></v-text-field>
             </v-form>
@@ -84,10 +84,10 @@
             <v-btn
               @click="addNewProfile"
               :disabled="!isNameDirty || !isNameValid"
-              >{{ t("accounts.newProfile.next") }}</v-btn
+              >{{ t("profiles.newProfile.next") }}</v-btn
             >
             <v-btn @click="cancel" variant="text">{{
-              t("accounts.newProfile.cancel")
+              t("profiles.newProfile.cancel")
             }}</v-btn>
           </v-col>
         </v-row>
@@ -182,13 +182,13 @@ const addNewProfile = async (): Promise<void> => {
 };
 const menuItems: IMenuItem[] = [
   {
-    text: t("accounts.newProfile.editPhoto"),
+    text: t("profiles.newProfile.editPhoto"),
     icon: "mdi-pencil",
     color: "warning",
     action: onTriggerUploader,
   },
   {
-    text: t("accounts.newProfile.deleteAvatar"),
+    text: t("profiles.newProfile.deleteAvatar"),
     icon: "mdi-delete",
     color: "error",
     action: deleteAvatar,
