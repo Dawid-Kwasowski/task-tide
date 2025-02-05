@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-container>
-      <v-row>
-        <v-col>
-          <v-card elevation="5">
+      <v-row justify="center">
+        <v-col cols="12" md="10" lg="6">
+          <v-card max-width="1000" elevation="5">
             <div class="pa-2 d-flex justify-center">
               <v-avatar class="elevation-20" size="150">
                 <v-img cover src="@/assets/images/TaskTide-logos.jpeg"></v-img>
@@ -21,8 +21,8 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-row>
-        <v-col>
+      <v-row justify="center">
+        <v-col cols="12" md="10" lg="6">
           <v-window v-model="tab">
             <v-window-item value="signInTab">
               <sign-in-component></sign-in-component>

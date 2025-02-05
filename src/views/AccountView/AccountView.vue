@@ -4,13 +4,28 @@ import { useI18n } from "vue-i18n";
 import { useAuthUser } from "@/composables/UseAuthUser";
 import UpdatePasswordForm from "@/views/AccountView/components/UpdatePasswordForm/UpdatePasswordForm.vue";
 import UpdateEmailForm from "@/views/AccountView/components/UpdateEmailForm/UpdateEmailForm.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog.vue";
 
 const router = useRouter();
 const { t } = useI18n();
 
-const { updateUser } = useAuthUser();
+const { updateUser, deleteUser, signOut } = useAuthUser();
 const user = ref(JSON.parse(localStorage.getItem("auth_key") || "")?.user);
+
+const confirmDialog = ref(false);
+
+const email = ref(null);
+
+const isMatch = computed(() => email.value === user.value?.email);
+
+const openConfirmDialog = () => (confirmDialog.value = true);
+
+const handleDelete = async () => {
+  await deleteUser();
+  await signOut();
+  await router.push({ name: "Auth" });
+};
 </script>
 
 <template>
@@ -41,7 +56,15 @@ const user = ref(JSON.parse(localStorage.getItem("auth_key") || "")?.user);
             </v-card-item>
             <v-divider />
             <v-card-item>
-              <update-password-form @update="(v) => updateUser(v)" />
+              <update-password-form
+                @update="
+                  (v) =>
+                    updateUser(
+                      v,
+                      'account.sections.password.notification.success',
+                    )
+                "
+              />
             </v-card-item>
           </v-card>
         </v-col>
@@ -49,11 +72,33 @@ const user = ref(JSON.parse(localStorage.getItem("auth_key") || "")?.user);
     </v-container>
 
     <v-fab
+      @click="openConfirmDialog"
       variant="tonal"
       absolute
       location="top center"
       icon="mdi-account-remove"
       color="red"
     ></v-fab>
+
+    <confirm-dialog
+      @confirm="handleDelete"
+      :confirm-disabled="!isMatch"
+      width="500"
+      @close="confirmDialog = false"
+      :title="t('account.confirmDialog.t')"
+      v-model="confirmDialog"
+    >
+      <v-form>
+        <div class="text-body-2">
+          {{ t("account.confirmDialog.description") }}
+          <span class="font-weight-black">{{ user.email }}</span>
+        </div>
+        <v-text-field
+          density="compact"
+          v-model="email"
+          variant="outlined"
+        ></v-text-field>
+      </v-form>
+    </confirm-dialog>
   </div>
 </template>

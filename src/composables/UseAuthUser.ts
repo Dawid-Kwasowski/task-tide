@@ -12,15 +12,24 @@ export const useAuthUser = () => {
   };
 
   const signUp = async (owner: IOwnerInfo) => {
-    await handleDatabaseAction(async () => {
+    return await handleDatabaseAction(async () => {
       const { error } = await supabase.auth.signUp(owner);
-
-      if (error) throw error;
-    }, "Signed up successfully");
+      if (error) throw "app.errors.conflict";
+      return error;
+    });
   };
 
   const signIn = async (owner: IOwnerInfo) => {
     return await handleDatabaseAction<any>(async () => {
+      const { data: userExist, error: existenceError } = await supabase.rpc(
+        "user_exists",
+        {
+          user_email: owner.email,
+        },
+      );
+
+      if (!userExist || existenceError) throw "app.errors.invalidCredential";
+
       const { error } = await supabase.auth.signInWithPassword(owner);
 
       if (error) throw "app.errors.invalidCredential";
@@ -41,12 +50,15 @@ export const useAuthUser = () => {
     }, "resetPassword.notification.checkEmail");
   };
 
-  const updateUser = async (attr: any) => {
-    return await handleDatabaseAction(async () => {
-      const { error } = await supabase.auth.updateUser(attr);
-
-      if (error) throw "app.errors.smthGoesWrong";
-    }, "updatePassword.notification.updated");
+  const updateUser = async (attr: any, msg?: string) => {
+    return await handleDatabaseAction(
+      async () => {
+        const { error } = await supabase.auth.updateUser(attr);
+        console.log(error);
+        if (error) throw "app.errors.smthGoesWrong";
+      },
+      msg ? msg : "updatePassword.notification.updated",
+    );
   };
 
   const getUser = async () => {
@@ -59,7 +71,11 @@ export const useAuthUser = () => {
   const deleteUser = async () => {
     await handleDatabaseAction(async () => {
       const id = JSON.parse(localStorage.getItem("auth_key") || "").user?.id;
-      const { error } = await supabase.auth.admin.deleteUser(id);
+
+      const { data, error } = await supabase
+        .from("users")
+        .update({ deleted_at: new Date() })
+        .eq("id", id);
     });
   };
 
@@ -70,5 +86,6 @@ export const useAuthUser = () => {
     passwordReset,
     updateUser,
     getUser,
+    deleteUser,
   };
 };

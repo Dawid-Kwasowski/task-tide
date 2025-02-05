@@ -52,6 +52,16 @@ export const messages = {
         email: {
           field: "Wpisz email",
         },
+        password: {
+          notification: {
+            success: "Hasło zostało zaktualizowane",
+          },
+        },
+      },
+
+      confirmDialog: {
+        t: "Chcesz usunąć użytkownika?",
+        description: "Aby potwierdzić, wpisz:",
       },
     },
 
@@ -64,7 +74,7 @@ export const messages = {
       },
       update: "Zaaktualizuj",
       notification: {
-        updated: "Hasło zostało zaktualizowane",
+        updated: "Hasło zostało zaktualizowane, sprawdź swoją skrzynkę",
       },
     },
     resetPassword: {

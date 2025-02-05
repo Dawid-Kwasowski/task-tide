@@ -1,5 +1,5 @@
 <template>
-  <v-card variant="tonal">
+  <v-card max-width="1000" variant="tonal">
     <v-card-title class="text-h4 text-center ma-2">
       {{ t("auth.signIn.t") }}
     </v-card-title>
