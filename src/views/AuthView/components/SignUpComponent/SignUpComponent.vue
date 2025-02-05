@@ -16,7 +16,7 @@ import { useAuthUser } from "@/composables/UseAuthUser";
 
 const { signUp, signIn } = useAuthUser();
 const router = useRouter();
-const createAccount = async (payload) => {
+const createAccount = async (payload: any) => {
   try {
     const error = await signUp(payload);
     if (error) return;

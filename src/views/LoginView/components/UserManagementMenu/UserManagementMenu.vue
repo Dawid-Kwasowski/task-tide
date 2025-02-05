@@ -79,8 +79,8 @@ onChange((files: any): void => {
   const file = files[0];
   const reader = new FileReader();
 
-  reader.onload = (evt) => {
-    store.updateAvatar(props.user_id, evt.target?.result);
+  reader.onload = (evt: any) => {
+    store.updateAvatar(props.user_id, evt?.target?.result);
   };
 
   if (file) {

@@ -4,7 +4,7 @@
     v-model="state.showToast"
     :color="state.color"
   >
-    {{ t(state.message) }}
+    {{ t(state.message || "") }}
 
     <template #actions>
       <v-btn variant="text" @click="state.showToast = false">

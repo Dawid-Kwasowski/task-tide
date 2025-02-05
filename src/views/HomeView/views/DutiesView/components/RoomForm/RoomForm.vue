@@ -37,7 +37,7 @@ const submit = handleSubmit(async (values, { resetForm }) => {
     await roomStore.editRoom({
       name: values.name,
       user_id: values.profile,
-      room_id: props.room?.room_id,
+      room_id: props.room?.room_id || "",
     });
   } else {
     await roomStore.addRoom({ name: values.name, user_id: values.profile });

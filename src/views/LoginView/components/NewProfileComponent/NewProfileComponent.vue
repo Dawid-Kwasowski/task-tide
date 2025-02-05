@@ -161,7 +161,7 @@ const deleteAvatar = (): void => {
   menu.value = false;
 };
 
-const submit = handleSubmit(async (values: any): void => {
+const submit = handleSubmit(async (values: any) => {
   Object.assign(values, { avatar: selectedImage.value });
   await addUser(values);
   emit("cancel");

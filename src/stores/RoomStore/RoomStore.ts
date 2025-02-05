@@ -26,9 +26,9 @@ export const useRoomStore = defineStore("RoomStore", {
             "*, duties (title, description, id, state, exp_time), profiles (username, avatar_url)",
           );
         this.rooms = <IRooms[]>data;
-      } catch (error) {
+      } catch (error: any) {
         await toast.show({
-          message: error.message,
+          message: error?.message,
           color: "red",
         });
       }
