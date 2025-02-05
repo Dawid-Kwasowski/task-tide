@@ -33,7 +33,7 @@ export default [
     component: () => import("@/views/AccountView/AccountView.vue"),
   },
   {
-    path: "/reset-password/:email?",
+    path: "/reset-password",
     name: "ResetPassword",
     component: () => import("@/views/ResetPasswordView/ResetPasswordView.vue"),
   },

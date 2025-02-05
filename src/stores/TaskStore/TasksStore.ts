@@ -63,9 +63,9 @@ export const useTaskStore = defineStore("TaskStore", {
 
         if (error) throw error;
         this.todos = tasks;
-      } catch (error) {
+      } catch (error: any) {
         await toast.show({
-          message: error.message,
+          message: error?.message,
           color: "red",
         });
       }

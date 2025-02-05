@@ -15,7 +15,7 @@ export default async function handleDatabaseAction<T>(
       console.log("response", response);
       return response;
     }
-  } catch (error) {
+  } catch (error: any) {
     await toast.show({
       message: error?.message || error,
       color: "red",

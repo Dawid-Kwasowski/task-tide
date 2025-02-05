@@ -22,7 +22,7 @@ const { handleSubmit, errors, defineField } = useForm({
     confirmPassword: string()
       .required(t("app.validationMessages.required"))
       .oneOf(
-        [yupRef("password"), null],
+        [yupRef("password")],
         t("app.validationMessages.passwordMustMach"),
       ),
   }),

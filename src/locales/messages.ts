@@ -74,7 +74,7 @@ export const messages = {
       },
       update: "Zaaktualizuj",
       notification: {
-        updated: "Hasło zostało zaktualizowane, sprawdź swoją skrzynkę",
+        updated: "Hasło zostało zaktualizowane",
       },
     },
     resetPassword: {

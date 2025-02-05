@@ -40,7 +40,7 @@ export const useUserStore = defineStore("UserStore", {
           updated_at: new Date().toISOString(),
           username: newUser.username,
           avatar_url: newUser.avatar_url,
-          owner_id: owner.data.user.id,
+          owner_id: owner?.data?.user?.id || "",
         });
 
         if (error) throw error;
