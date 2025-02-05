@@ -11,14 +11,16 @@ const props = withDefaults(defineProps<IRoomFormProps>(), {
   editMode: false,
 });
 
+const { t } = useI18n();
+
 const { defineField, errors, handleSubmit } = useForm({
   initialValues: {
     name: props.room?.name || "",
     profile: props.room?.user_id || "",
   },
   validationSchema: object({
-    name: string().required(),
-    profile: string(),
+    name: string().required(t("app.validationMessages.required")),
+    profile: string().required(t("app.validationMessages.required")),
   }),
 });
 
@@ -26,8 +28,6 @@ const profilesStore = useUserStore();
 const roomStore = useRoomStore();
 
 const { userList } = storeToRefs(profilesStore);
-
-const { t } = useI18n();
 
 const [name, nameAttr] = defineField("name");
 const [profile, profilesAttr] = defineField("profile");
@@ -59,6 +59,7 @@ const submit = handleSubmit(async (values, { resetForm }) => {
     </div>
     <div>
       <v-select
+        :error-messages="errors.profile"
         clearable
         v-bind="profilesAttr"
         item-title="username"
