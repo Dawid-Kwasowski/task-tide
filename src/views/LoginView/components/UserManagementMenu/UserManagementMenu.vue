@@ -15,10 +15,11 @@
         <v-row>
           <v-col cols="12">
             <v-text-field
-              :error-message="username.errorMessage.value"
+              :error-message="errors.username"
               color="warning"
               @click:append="editName"
-              v-model="username.value.value"
+              v-bind="usernameAttr"
+              v-model="username"
               append-icon="mdi-pencil"
               :label="t('auth.editProfiles.editName')"
               variant="outlined"
@@ -88,9 +89,20 @@ onChange((files: any): void => {
   }
 });
 
-const { handleSubmit } = useForm({
+const { handleSubmit, defineField, errors } = useForm({
   validationSchema: object({
-    username: string().required(),
+    username: string()
+      .required(t("app.validationMessages.required"))
+      .test(
+        "len",
+        t("app.validationMessages.minLength", 3),
+        (value) => value.length >= 3,
+      )
+      .test(
+        "maxLen",
+        t("app.validationMessages.maxLength", 20),
+        (value) => value.length <= 20,
+      ),
   }),
   initialValues: {
     username: props.username,
@@ -105,9 +117,9 @@ const deleteUser = (): void => {
   store.deleteUser(`${props.user_id}`);
 };
 
-const username = useField("username");
+const [username, usernameAttr] = defineField("username");
 
 const editName = handleSubmit((values): void => {
-  store.updateUsername(props.user_id, values.username);
+  store.updateUsername(props.user_id, values.username.trim());
 });
 </script>

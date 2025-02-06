@@ -38,7 +38,7 @@ export const useUserStore = defineStore("UserStore", {
         const { error } = await supabase.from("profiles").insert({
           user_id: uuidv4(),
           updated_at: new Date().toISOString(),
-          username: newUser.username,
+          username: newUser.username.trim(),
           avatar_url: newUser.avatar_url,
           owner_id: owner?.data?.user?.id || "",
         });

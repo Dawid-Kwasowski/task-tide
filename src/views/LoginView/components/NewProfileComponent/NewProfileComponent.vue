@@ -110,19 +110,25 @@ import {
   useIsFieldValid,
 } from "vee-validate";
 import { useUserStore } from "@/stores/UserStore/UserStore";
+import { object, string } from "yup";
 
 const { t } = useI18n();
 const { addUser } = useUserStore();
-
 const { handleSubmit, handleReset } = useForm({
-  validationSchema: {
-    name(value: string): string | true {
-      if (!value) return t("app.validationMessages.required");
-      if (value?.length > 20)
-        return t("app.validationMessages.maxLength", { count: 20 });
-      return true;
-    },
-  },
+  validationSchema: object({
+    name: string()
+      .required(t("app.validationMessages.required"))
+      .test(
+        "len",
+        t("app.validationMessages.minLength", 3),
+        (value) => value.length >= 3,
+      )
+      .test(
+        "maxLen",
+        t("app.validationMessages.maxLength", 20),
+        (value) => value.length <= 20,
+      ),
+  }),
 });
 
 const emit = defineEmits(["cancel"]);
