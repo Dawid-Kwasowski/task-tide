@@ -12,7 +12,6 @@ export default async function handleDatabaseAction<T>(
         message: successMessage,
         color: "success",
       });
-      console.log("response", response);
       return response;
     }
   } catch (error: any) {

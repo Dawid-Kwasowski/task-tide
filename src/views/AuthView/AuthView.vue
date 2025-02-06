@@ -33,6 +33,19 @@
           </v-window>
         </v-col>
       </v-row>
+      <v-row justify="center">
+        <v-col cols="12" md="10" lg="6">
+          <v-btn
+            id="language-activator"
+            :text="t('app.translateButton')"
+            append-icon="mdi-translate"
+            location="bottom center"
+            variant="flat"
+          ></v-btn>
+
+          <language-menu />
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -41,6 +54,7 @@ import { ref } from "vue";
 import SignUpComponent from "./components/SignUpComponent/SignUpComponent.vue";
 import SignInComponent from "./components/SignInComponent/SignInComponent.vue";
 import { useI18n } from "vue-i18n";
+import LanguageMenu from "@/components/LanguageMenu/LanguageMenu.vue";
 const tab = ref(null);
 const { t } = useI18n();
 </script>
