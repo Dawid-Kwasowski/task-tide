@@ -43,7 +43,7 @@ export const useAuthUser = () => {
   const passwordReset = async (email: string) => {
     await handleDatabaseAction(async () => {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: "http://localhost:3000/update-password",
+        redirectTo: import.meta.env.VITE_SUPABASE_REDIRECT_URL,
       });
 
       if (error) throw "app.errors.smthGoesWrong";
