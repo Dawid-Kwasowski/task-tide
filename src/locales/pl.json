@@ -106,7 +106,7 @@
       "hello": "Witaj!",
       "navigation": {
         "general": "Ogólne",
-        "duties": "Obciążenia służbowe"
+        "duties": "Obowiązki domowe"
       }
     },
     "task": {
@@ -136,7 +136,7 @@
       }
     },
     "duty": {
-      "t": "Obciążenia służbowe",
+      "t": "Obowiązki domowe",
       "rotation": "Rotacja",
       "editModeOn": "Włącz tryb edycji",
       "editModeOff": "Wyłącz tryb edycji",
