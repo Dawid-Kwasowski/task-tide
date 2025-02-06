@@ -1,53 +1,49 @@
-# default
+# TaskTide
 
-## Project setup
+Link to web application: [click here](https://task-tide-app.netlify.app/auth)
 
-```
-# yarn
-yarn
+TaskTide is a chore and duty management app designed to help users organize and track their tasks efficiently. Whether for personal use or household management, TaskTide provides a seamless experience for staying on top of daily responsibilities.
 
-# npm
-npm install
+## Features
 
-# pnpm
-pnpm install
+- **Task Management** – Easily create, edit, and delete tasks.
+- **Scheduling** – Set due dates.
+- **User-Friendly Interface** – Clean and intuitive design for effortless navigation.
+- **Multiple Users** – Share tasks and collaborate with family or roommates.
 
-# bun
-bun install
-```
+## Future features
 
-### Compiles and hot-reloads for development
+- **Progress Tracking** – Monitor task and duty completion.
+- **Reminders** - Receive reminders
+- **PWA**
 
-```
-# yarn
-yarn dev
+## Screenshots
 
-# npm
-npm run dev
+![img_1.png](img_1.png)
 
-# pnpm
-pnpm dev
+![img_2.png](img_2.png)
 
-# bun
-bun run dev
-```
+![img_3.png](img_3.png)
 
-### Compiles and minifies for production
+![img_7.png](img_7.png)
 
-```
-# yarn
-yarn build
 
-# npm
-npm run build
+## Tech Stack
 
-# pnpm
-pnpm build
+- ***Frontend:*** Vue 3, Vuetify, Pinia, Vue Router 4
+- **Backend:** Supabase
+- **Database:** PostgreSQL
 
-# bun
-bun run build
-```
+## Contributing
 
-### Customize configuration
+Contributions are welcome! To contribute:
 
-See [Configuration Reference](https://vitejs.dev/config/).
+1. Fork the repository.
+2. Create a new branch (`feature-branch-name`).
+3. Commit your changes.
+4. Push to your branch and create a Pull Request.
+
+---
+
+Feel free to update the information based on the actual tech stack and repo details. Let me know if you want any modifications!
+
