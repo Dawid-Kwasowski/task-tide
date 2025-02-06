@@ -1,4 +1,4 @@
-# TaskTide
+# TaskTide 
 
 Link to web application: [click here](https://task-tide-app.netlify.app/auth)
 
@@ -47,3 +47,5 @@ Contributions are welcome! To contribute:
 
 Feel free to update the information based on the actual tech stack and repo details. Let me know if you want any modifications!
 
+
+Version 1.0.0
