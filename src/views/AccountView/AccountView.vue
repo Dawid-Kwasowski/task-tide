@@ -29,76 +29,74 @@ const handleDelete = async () => {
 </script>
 
 <template>
-  <div>
-    <v-container fluid>
-      <v-row>
-        <v-col cols="2">
-          <div class="ma-5 d-flex">
-            <v-btn
-              @click="router.push({ name: 'Browse' })"
-              variant="text"
-              icon="mdi-arrow-left"
-            ></v-btn>
-          </div>
-        </v-col>
-        <v-col>
-          <h1 class="text-h2 my-5">{{ t("account.t") }}</h1>
-        </v-col>
-      </v-row>
-      <v-row justify="center">
-        <v-col cols="6">
-          <v-card>
-            <v-card-item>
-              <update-email-form
-                @update="(v) => updateUser(v)"
-                :email="user.email"
-              />
-            </v-card-item>
-            <v-divider />
-            <v-card-item>
-              <update-password-form
-                @update="
-                  (v) =>
-                    updateUser(
-                      v,
-                      'account.sections.password.notification.success',
-                    )
-                "
-              />
-            </v-card-item>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-
-    <v-fab
-      @click="openConfirmDialog"
-      variant="tonal"
-      absolute
-      location="top center"
-      icon="mdi-account-remove"
-      color="red"
-    ></v-fab>
-
-    <confirm-dialog
-      @confirm="handleDelete"
-      :confirm-disabled="!isMatch"
-      width="500"
-      @close="confirmDialog = false"
-      :title="t('account.confirmDialog.t')"
-      v-model="confirmDialog"
-    >
-      <v-form>
-        <div class="text-body-2">
-          {{ t("account.confirmDialog.description") }}
-          <span class="font-weight-black">{{ user.email }}</span>
+  <v-container fluid>
+    <v-row>
+      <v-col cols="2">
+        <div class="ma-5 d-flex">
+          <v-btn
+            @click="router.push({ name: 'Browse' })"
+            variant="text"
+            icon="mdi-arrow-left"
+          ></v-btn>
         </div>
-        <v-text-field
-          density="compact"
-          v-model="email"
-          variant="outlined"
-        ></v-text-field>
-      </v-form>
-    </confirm-dialog>
-  </div>
+      </v-col>
+      <v-col>
+        <h1 class="text-h2 my-5">{{ t("account.t") }}</h1>
+      </v-col>
+    </v-row>
+    <v-row justify="center">
+      <v-col cols="12" md="6">
+        <v-card>
+          <v-card-item>
+            <update-email-form
+              @update="(v) => updateUser(v)"
+              :email="user.email"
+            />
+          </v-card-item>
+          <v-divider />
+          <v-card-item>
+            <update-password-form
+              @update="
+                (v) =>
+                  updateUser(
+                    v,
+                    'account.sections.password.notification.success',
+                  )
+              "
+            />
+          </v-card-item>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
+
+  <v-btn
+    class="my-2"
+    @click="openConfirmDialog"
+    variant="tonal"
+    location="top center"
+    icon="mdi-account-remove"
+    color="red"
+  ></v-btn>
+
+  <confirm-dialog
+    @confirm="handleDelete"
+    :confirm-disabled="!isMatch"
+    width="500"
+    @close="confirmDialog = false"
+    :title="t('account.confirmDialog.t')"
+    v-model="confirmDialog"
+  >
+    <v-form>
+      <div class="text-body-2">
+        {{ t("account.confirmDialog.description") }}
+        <span class="font-weight-black">{{ user.email }}</span>
+      </div>
+      <v-text-field
+        density="compact"
+        v-model="email"
+        variant="outlined"
+      ></v-text-field>
+    </v-form>
+  </confirm-dialog>
 </template>

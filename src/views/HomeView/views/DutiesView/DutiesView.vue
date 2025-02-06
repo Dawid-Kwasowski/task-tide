@@ -64,7 +64,11 @@ const atLeastRoom = (count: number) => roomsStore.rooms.length > count - 1;
     </v-row>
   </v-container>
 
-  <action-button @click="roomFormDialog = true" color="primary">
+  <action-button
+    class="position-fixed"
+    @click="roomFormDialog = true"
+    color="primary"
+  >
     <template #body>
       <v-icon class="mr-2" icon="mdi-plus"></v-icon>
       {{ t("home.duty.addRoom") }}
